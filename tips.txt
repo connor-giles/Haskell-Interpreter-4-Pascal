@@ -1,0 +1,3 @@
+for variable storage use some kind of map and there are multiple 
+
+you can introduce rules to recognize tokens in Alex and the 'tokens' part is where there is regex to recognize tokens 
