@@ -249,7 +249,7 @@ happyReduction_10 happy_x_2
 	happy_x_1
 	 =  case happyOut9 happy_x_2 of { (HappyWrap9 happy_var_2) -> 
 	happyIn9
-		 (happy_var_2
+		 (Op1 "+" happy_var_2
 	)}
 
 happyReduce_11 :: () => Happy_GHC_Exts.Int# -> Token -> Happy_GHC_Exts.Int# -> Happy_IntList -> HappyStk (HappyAbsSyn ) -> Parser (HappyAbsSyn )

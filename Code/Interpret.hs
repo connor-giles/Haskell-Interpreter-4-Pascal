@@ -19,6 +19,7 @@ import Data
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 biOp1 :: String -> Float -> Float
 biOp1 "-" v1 = (-v1)
+biOp1 "+" v1 = v1
 
 biOp2 :: String -> Float -> Float -> Float
 biOp2 "+" v1 v2 = v1 + v2

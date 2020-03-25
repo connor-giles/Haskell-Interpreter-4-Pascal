@@ -13,6 +13,9 @@ main = hspec $ do
     context "-" $ do
         it "Negates Floats Literally" $ do
             biOp1 "-" 2.0 `shouldBe` (-2.0)
+    context "+" $ do
+        it "Ignores Plus Correctly" $ do
+            biOp1 "+" 2.0 `shouldBe` 2.0
 
 
   describe "biOp2" $ do

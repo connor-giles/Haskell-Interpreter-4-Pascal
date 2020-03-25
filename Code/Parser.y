@@ -73,7 +73,7 @@ ID_List :: {[String]}
 
 -- Expressions
 Exp :: {Exp}
-    : '+' Exp { $2 } -- ignore Plus
+    : '+' Exp { Op1 "+" $2 } -- ignore Plus
     | '-' Exp { Op1 "-" $2}
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
