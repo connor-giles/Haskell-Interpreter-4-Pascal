@@ -25,6 +25,7 @@ biOp2 "*" v1 v2 = v1 * v2
 biOp2 "/" v1 v2 = v1 / v2
 
 intExp :: Exp -> Float
+intExp (Real v1) = v1 
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
 
 -- make sure you write test unit cases for all functions
