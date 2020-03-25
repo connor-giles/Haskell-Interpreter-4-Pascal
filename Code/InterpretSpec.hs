@@ -65,5 +65,10 @@ main = hspec $ do
     context ">=" $ do
         it ">=" $ do
             bibOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+
+  --describe "intBoolExp" $ do
+   -- context "Relational Operators" $ do
+    --    it "<" $ do
+    --        intBoolExp (opB "<" (Real 2.0) (Real 3.0)) `shouldBe` True
             
 

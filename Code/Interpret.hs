@@ -43,7 +43,7 @@ bibOp2 ">=" b1 b2 = b1 >= b2
 intBoolExp :: BoolExp -> Bool 
 intBoolExp True_C = True
 intBoolExp False_C = False
---intBoolExp (OpB op b1 b2) = bibOp2 op (intBoolExp b1) (intBoolExp b2) 
+--intBoolExp (OpB op v1 v2) = bibOp2 op (intExp v1) (intExp v2) 
 
 -- make sure you write test unit cases for all functions
 
