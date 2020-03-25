@@ -34,3 +34,12 @@ main = hspec $ do
     context "+" $ do
         it "Adds Floats" $ do
             intExp (Op2 "+" (Real 2.0) (Real 3.0)) `shouldBe` 5.0
+    context "-" $ do
+        it "Subtracts Floats" $ do
+            intExp (Op2 "-" (Real 10.0) (Real 3.0)) `shouldBe` 7.0
+    context "*" $ do
+        it "Multiplies Floats" $ do
+            intExp (Op2 "*" (Real 2.0) (Real 3.0)) `shouldBe` 6.0
+    context "/" $ do
+        it "Divides Floats" $ do
+            intExp (Op2 "/" (Real 10.0) (Real 5.0)) `shouldBe` 2.0
