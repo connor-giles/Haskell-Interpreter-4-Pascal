@@ -43,3 +43,27 @@ main = hspec $ do
     context "/" $ do
         it "Divides Floats" $ do
             intExp (Op2 "/" (Real 10.0) (Real 5.0)) `shouldBe` 2.0
+
+  
+  describe "bibOp1" $ do
+    context "Not" $ do
+        it "Negates True Literally" $ do
+            bibOp1 "Not" True `shouldBe` (False)
+        it "Negates False Literally" $ do
+            bibOp1 "Not" False `shouldBe` (True)   
+
+  describe "bibOp2" $ do
+    context "<" $ do
+        it "<" $ do
+            bibOp2 "<" 5.0 6.0  `shouldBe` (True)
+    context ">" $ do
+        it ">" $ do
+            bibOp2 ">" 5.0 6.0  `shouldBe` (False)  
+    context "<=" $ do
+        it "<=" $ do
+            bibOp2 "<=" 10.0 10.0  `shouldBe` (True) 
+    context ">=" $ do
+        it ">=" $ do
+            bibOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+            
+

@@ -3,6 +3,8 @@ module Interpret
     interpret,
     biOp2,
     biOp1,
+    bibOp1,
+    bibOp2,
     intExp
 )
 where
@@ -27,6 +29,21 @@ biOp2 "/" v1 v2 = v1 / v2
 intExp :: Exp -> Float
 intExp (Real v1) = v1 
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
+
+bibOp1 :: String -> Bool -> Bool
+bibOp1 "Not" True = False
+bibOp1 "Not" False = True
+
+bibOp2 :: String -> Float -> Float -> Bool
+bibOp2 "<" b1 b2 = b1 < b2
+bibOp2 ">" b1 b2 = b1 > b2
+bibOp2 "<=" b1 b2 = b1 <= b2
+bibOp2 ">=" b1 b2 = b1 >= b2
+
+intBoolExp :: BoolExp -> Bool 
+intBoolExp True_C = True
+intBoolExp False_C = False
+--intBoolExp (OpB op b1 b2) = bibOp2 op (intBoolExp b1) (intBoolExp b2) 
 
 -- make sure you write test unit cases for all functions
 
