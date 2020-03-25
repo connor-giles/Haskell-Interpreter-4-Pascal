@@ -9,10 +9,27 @@ import Data
 
 main :: IO ()
 main = hspec $ do
+  describe "biOp1" $ do
+    context "-" $ do
+        it "Negates Floats Literally" $ do
+            biOp1 "-" 2.0 `shouldBe` (-2.0)
+
+
   describe "biOp2" $ do
     context "+" $ do
-        it "Adds Floats" $ do
+        it "Adds Floats Literally" $ do
             biOp2 "+" 2.0 3.0 `shouldBe` 5.0
+    context "-" $ do
+        it "Subtracts Floats Literally" $ do
+            biOp2 "-" 10.0 3.0 `shouldBe` 7.0
+    context "*" $ do 
+        it "Multiplies Floats Literally" $ do
+            biOp2 "*" 2.0 3.0 `shouldBe` 6.0
+    context "/" $ do
+        it "Divides Floats Literally" $ do
+            biOp2 "/" 10.0 5.0 `shouldBe` 2.0
+
+
   describe "intExp" $ do
     context "+" $ do
         it "Adds Floats" $ do
