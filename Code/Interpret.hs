@@ -7,7 +7,6 @@ module Interpret
     uniOp1,
     biBoolOp1,
     biBoolOp2,
-    intExp
 )
 where
 
@@ -21,6 +20,11 @@ import Data
 --THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
 uniOp1 :: String -> Float -> Float
 uniOp1 "-" v1 = (-v1)
+uniOp1 "sqrt" v1 = sqrt v1
+uniOp1 "natlog" v1 = log v1
+uniOp1 "sin" v1 = sin v1
+uniOp1 "cos" v1 = cos v1
+uniOp1 "exp" v1 = exp v1
 
 biOp2 :: String -> Float -> Float -> Float
 biOp2 "+" v1 v2 = v1 + v2

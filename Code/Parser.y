@@ -37,8 +37,13 @@ import Lexer
         ':='            { Token _ (TokenK ":=")   }
         'true'          { Token _ (TokenK "true") }
         'false'         { Token _ (TokenK "false")}
+        'sqrt'          { Token _ (TokenK "sqrt") } 
+        'natlog'        { Token _ (TokenK "natlog")}
+        'sin'           { Token _ (TokenK "sin")  }
+        'exp'           { Token _ (TokenK "exp")  }
+        'cos'           { Token _ (TokenK "false")}
         'and'           { Token _ (TokenK "and")  }
-        'or'            { Token _ (TokenK "or")  }
+        'or'            { Token _ (TokenK "or")   }
         'not'           { Token _ (TokenK "not")  }
         'var'           { Token _ (TokenK "var")  }
         ':'             { Token _ (TokenK ":")    }
@@ -80,6 +85,11 @@ ID_List :: {[String]}
 Exp :: {Exp}
     : '+' Exp { $2 } -- ignore Plus
     | '-' Exp { Op1 "-" $2}
+    | 'sqrt' Exp  { Op1 "sqrt" $2 }
+    | 'natlog' Exp  { Op1 "natlog" $2 }
+    | 'sin' Exp  { Op1 "sin" $2 }
+    | 'cos' Exp  { Op1 "cos" $2 }
+    | 'exp' Exp  { Op1 "exp" $2 }
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | Exp '/' Exp { Op2 "/" $1 $3 }
@@ -106,6 +116,7 @@ GenExp :: {GenExp}
     : Exp { FloatExp $1 }
     | BoolExp { BExp $1 }
 
+--More stuff needs to go here
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 }
     

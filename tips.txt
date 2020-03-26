@@ -1,3 +1,29 @@
 for variable storage use some kind of map and there are multiple 
 
 you can introduce rules to recognize tokens in Alex and the 'tokens' part is where there is regex to recognize tokens 
+
+
+1. Program Name (no args)
+2. Variable Declarations
+3. Main program block
+4. Comments: (* ... *)
+5. Basic arithmetic expressions with variables
+6. Boolean/logical Expressions
+7. Precedence of operators
+8. Decision Making (if-then-else, case)
+9. Special Expressions: Readln, Writeln, sqrt, sin, cos, ln, exp
+10. while-do and for-do loops
+11. break and continue keywords
+12. user-defined procedures and functions
+
+Implementing scoping
+
+Please implement static scoping for the language. Specifically:
+
+- Each time a new block opens (while, for statements) a new scope is created.
+
+- Functions (procedures) create scopes as well. Only global variables are visible  in the functions (together with their local scopes).
+
+- Chain the scopes as they are created and keep track what is visible where
+
+

@@ -13,6 +13,21 @@ main = hspec $ do
     context "-" $ do
         it "Negates Floats Literally" $ do
             uniOp1 "-" 2.0 `shouldBe` (-2.0)
+    context "sqrt" $ do
+        it "Performs sqrt Literally" $ do
+            uniOp1 "sqrt" 9.0 `shouldBe` 3.0
+    context "natlog" $ do
+        it "Performs natural log Literally" $ do
+            uniOp1 "natlog" 2.718 `shouldBe` 0.999896315728952
+    context "sin" $ do
+        it "Performs sin Literally" $ do
+            uniOp1 "sin" 1.57079633 `shouldBe` 1.0
+    context "cos" $ do
+        it "Performs cos Literally" $ do
+            uniOp1 "cos" 3.14159265 `shouldBe` (-1.0)
+    context "exp" $ do
+        it "Performs exp Literally" $ do
+            uniOp1 "exp" 1 `shouldBe` 2.7182817
 
   describe "biOp2" $ do
     context "+" $ do
@@ -30,8 +45,11 @@ main = hspec $ do
 
 
   describe "intExp" $ do
-    context "Literal" $ do
+    context "Float Literal" $ do
         it "5.0 Literal" $ do
+            intExp (Real 5.0) `shouldBe` 5.0
+    context "sqrt" $ do
+        it "Calculates sqrt from AST" $ do
             intExp (Real 5.0) `shouldBe` 5.0
     context "+" $ do
         it "Adds Floats from AST" $ do
