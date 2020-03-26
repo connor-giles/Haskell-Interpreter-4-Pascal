@@ -9,11 +9,10 @@ import Data
 
 main :: IO ()
 main = hspec $ do
-  describe "biOp1" $ do
+  describe "uniOp1" $ do
     context "-" $ do
         it "Negates Floats Literally" $ do
-            biOp1 "-" 2.0 `shouldBe` (-2.0)
-
+            uniOp1 "-" 2.0 `shouldBe` (-2.0)
 
   describe "biOp2" $ do
     context "+" $ do
@@ -48,26 +47,26 @@ main = hspec $ do
             intExp (Op2 "/" (Real 10.0) (Real 5.0)) `shouldBe` 2.0
 
   
-  describe "bibOp1" $ do
+  describe "biBoolOp1" $ do
     context "Not" $ do
         it "Negates True Literally" $ do
-            bibOp1 "Not" True `shouldBe` (False)
+            biBoolOp1 "Not" True `shouldBe` (False)
         it "Negates False Literally" $ do
-            bibOp1 "Not" False `shouldBe` (True)   
+            biBoolOp1 "Not" False `shouldBe` (True)   
 
-  describe "bibOp2" $ do
+  describe "biBoolOp2" $ do
     context "<" $ do
-        it "<" $ do
-            bibOp2 "<" 5.0 6.0  `shouldBe` (True)
+        it "Tests Less Than" $ do
+            biBoolOp2 "<" 5.0 6.0  `shouldBe` (True)
     context ">" $ do
-        it ">" $ do
-            bibOp2 ">" 5.0 6.0  `shouldBe` (False)  
+        it "Tests Greater Than" $ do
+            biBoolOp2 ">" 5.0 6.0  `shouldBe` (False)  
     context "<=" $ do
-        it "<=" $ do
-            bibOp2 "<=" 10.0 10.0  `shouldBe` (True) 
+        it "Tests Less Than or Equal" $ do
+            biBoolOp2 "<=" 10.0 10.0  `shouldBe` (True) 
     context ">=" $ do
-        it ">=" $ do
-            bibOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+        it "Tests Greater Than or Equal" $ do
+            biBoolOp2 ">=" 36.0 55.5  `shouldBe` (False) 
 
   describe "intBoolExp" $ do
     context "Relational Operators" $ do

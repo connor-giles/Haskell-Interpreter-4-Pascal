@@ -18,29 +18,33 @@ import Lexer
 -- TokenK is for keyword
 -- TokenOp is for operator
 %token
-        int             { Token _ (TokenInt $$) }
+        int             { Token _ (TokenInt $$)   }
         float           { Token _ (TokenFloat $$) }
-        ID              { Token _ (TokenID $$)  }
+        ID              { Token _ (TokenID $$)    }
         '+'             { Token _ (TokenOp "+")   }
         '-'             { Token _ (TokenOp "-")   }
         '*'             { Token _ (TokenOp "*")   }
         '/'             { Token _ (TokenOp "/")   }
         '='             { Token _ (TokenOp "=")   }
+        '<'             { Token _ (TokenOp "<")   }
+        '>'             { Token _ (TokenOp ">")   }
+        '<='            { Token _ (TokenOp "<=")  }
+        '>='            { Token _ (TokenOp ">=")  }
         '('             { Token _ (TokenK  "(")   }
         ')'             { Token _ (TokenK  ")")   }
-        'begin'         { Token _ (TokenK "begin") }
+        'begin'         { Token _ (TokenK "begin")}
         'end'           { Token _ (TokenK "end")  }
         ':='            { Token _ (TokenK ":=")   }
         'true'          { Token _ (TokenK "true") }
-        'false'         { Token _ (TokenK "false") }
-        'and'           { Token _ (TokenK "and") }
-        'not'           { Token _ (TokenK "not") }
-        'var'           { Token _ (TokenK "var") }
-        ':'             { Token _ (TokenK ":") }
+        'false'         { Token _ (TokenK "false")}
+        'and'           { Token _ (TokenK "and")  }
+        'not'           { Token _ (TokenK "not")  }
+        'var'           { Token _ (TokenK "var")  }
+        ':'             { Token _ (TokenK ":")    }
         'bool'          { Token _ (TokenK "bool") }
         'real'          { Token _ (TokenK "real") }
-        'string'        { Token _ (TokenK "string") }
-        ','             { Token _ (TokenK ",") }
+        'string'        { Token _ (TokenK "string")}
+        ','             { Token _ (TokenK ",")    }
         'ID_List'       { Token _ (TokenK "ID_List") }
 
 -- associativity of operators in reverse precedence order
@@ -71,15 +75,28 @@ ID_List :: {[String]}
     : ID {[$1]}
     | ID ',' ID_List { $1:$3 }
 
--- Expressions
+-- Expressions (MIGHT NEED TO PUT RELATIONAL INTO BoolExp IDK!!!)
 Exp :: {Exp}
     : '+' Exp { $2 } -- ignore Plus
     | '-' Exp { Op1 "-" $2}
+<<<<<<< HEAD
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | Exp '/' Exp { Op2 "/" $1 $3}
     | Exp '-' Exp { Op2 "-" $1 $3}
     | '(' Exp ')' { $2 } -- ignore brackets
+=======
+    | Exp '+' Exp    { Op2 "+" $1 $3 }
+    | Exp '*' Exp    { Op2 "*" $1 $3 }
+    | Exp '-' Exp    { Op2 "-" $1 $3 }
+    | Exp '/' Exp    { Op2 "/" $1 $3 }
+    | Exp '=' Exp    { Op2 "=" $1 $3 }
+    | Exp '<' Exp    { Op2 "<" $1 $3 }
+    | Exp '>' Exp    { Op2 ">" $1 $3 }
+    | Exp '<=' Exp   { Op2 "<=" $1 $3 }
+    | Exp '>=' Exp   { Op2 ">=" $1 $3 }
+    | '(' Exp ')'    { $2 } -- ignore brackets
+>>>>>>> dae6002d169704138433e64d7b8302191140b1cd
 
 BoolExp :: {BoolExp}
     : 'true' { True_C }

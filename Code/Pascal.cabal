@@ -19,6 +19,7 @@ executable Pascal
   main-is:             Main.hs
   -- other-modules:       
   other-modules:       Interpret
+                     , Pascal 
                      , Parser
                      , Lexer
                      , Data
