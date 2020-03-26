@@ -37,6 +37,7 @@ biBoolOp1 "Not" True = False
 biBoolOp1 "Not" False = True
 
 biBoolOp2 :: String -> Float -> Float -> Bool
+biBoolOp2 "=" b1 b2 = b1 == b2
 biBoolOp2 "<" b1 b2 = b1 < b2
 biBoolOp2 ">" b1 b2 = b1 > b2
 biBoolOp2 "<=" b1 b2 = b1 <= b2

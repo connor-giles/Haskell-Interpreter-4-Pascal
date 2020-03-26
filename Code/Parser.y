@@ -38,6 +38,7 @@ import Lexer
         'true'          { Token _ (TokenK "true") }
         'false'         { Token _ (TokenK "false")}
         'and'           { Token _ (TokenK "and")  }
+        'or'            { Token _ (TokenK "or")  }
         'not'           { Token _ (TokenK "not")  }
         'var'           { Token _ (TokenK "var")  }
         ':'             { Token _ (TokenK ":")    }
@@ -75,34 +76,26 @@ ID_List :: {[String]}
     : ID {[$1]}
     | ID ',' ID_List { $1:$3 }
 
--- Expressions (MIGHT NEED TO PUT RELATIONAL INTO BoolExp IDK!!!)
+-- Expressions
 Exp :: {Exp}
     : '+' Exp { $2 } -- ignore Plus
     | '-' Exp { Op1 "-" $2}
-<<<<<<< HEAD
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
-    | Exp '/' Exp { Op2 "/" $1 $3}
-    | Exp '-' Exp { Op2 "-" $1 $3}
+    | Exp '/' Exp { Op2 "/" $1 $3 }
+    | Exp '-' Exp { Op2 "-" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
-=======
-    | Exp '+' Exp    { Op2 "+" $1 $3 }
-    | Exp '*' Exp    { Op2 "*" $1 $3 }
-    | Exp '-' Exp    { Op2 "-" $1 $3 }
-    | Exp '/' Exp    { Op2 "/" $1 $3 }
-    | Exp '=' Exp    { Op2 "=" $1 $3 }
-    | Exp '<' Exp    { Op2 "<" $1 $3 }
-    | Exp '>' Exp    { Op2 ">" $1 $3 }
-    | Exp '<=' Exp   { Op2 "<=" $1 $3 }
-    | Exp '>=' Exp   { Op2 ">=" $1 $3 }
-    | '(' Exp ')'    { $2 } -- ignore brackets
->>>>>>> dae6002d169704138433e64d7b8302191140b1cd
 
 BoolExp :: {BoolExp}
     : 'true' { True_C }
     | 'false' { False_C }
     | 'not' BoolExp { Not $2 }
+    | Exp '<' Exp { OpN "<" $1 $3 }
+    | Exp '>' Exp { OpN ">" $1 $3 }
+    | Exp '<=' Exp { OpN "<=" $1 $3 }
+    | Exp '>=' Exp { OpN ">=" $1 $3 }
     | BoolExp 'and' BoolExp { OpB "and" $1 $3 }
+    | BoolExp 'or' BoolExp { OpB "or" $1 $3 }
     | ID { Var_B $1 }
 
 Statements :: {[Statement]}

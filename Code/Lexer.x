@@ -41,7 +41,7 @@ tokens :-
   [0-9]+\.[0-9]+                        { tok_read       TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]               { tok_string     TokenOp    }
   [\(]|[\)]|begin|end|true|false        { tok_string     TokenK     }
-  :=                                    { tok_string     TokenOp    }
+  :=|and|or                             { tok_string     TokenOp    }
   [a-zA-Z][[a-zA-Z0-9]\_\']*            { tok_string     TokenID    }
 
 {
