@@ -31,6 +31,9 @@ main = hspec $ do
 
 
   describe "intExp" $ do
+    context "Literal" $ do
+        it "5.0 Literal" $ do
+            intExp (Real 5.0) `shouldBe` 5.0
     context "+" $ do
         it "Adds Floats" $ do
             intExp (Op2 "+" (Real 2.0) (Real 3.0)) `shouldBe` 5.0
@@ -66,9 +69,9 @@ main = hspec $ do
         it ">=" $ do
             bibOp2 ">=" 36.0 55.5  `shouldBe` (False) 
 
-  --describe "intBoolExp" $ do
-   -- context "Relational Operators" $ do
-    --    it "<" $ do
-    --        intBoolExp (opB "<" (Real 2.0) (Real 3.0)) `shouldBe` True
+  describe "intBoolExp" $ do
+    context "Relational Operators" $ do
+        it "<" $ do
+            intBoolExp (OpN "<" (Real 2.0) (Real 3.0)) `shouldBe` True
             
 

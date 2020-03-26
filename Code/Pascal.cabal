@@ -23,6 +23,7 @@ executable Pascal
                      , Lexer
                      , Data
                      , Base
+                     , Pascal
                      , Wrapper
   -- other-extensions:    
   build-depends:       base >=4.7

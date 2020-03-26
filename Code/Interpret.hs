@@ -5,7 +5,8 @@ module Interpret
     biOp1,
     bibOp1,
     bibOp2,
-    intExp
+    intExp,
+    intBoolExp
 )
 where
 
@@ -43,7 +44,7 @@ bibOp2 ">=" b1 b2 = b1 >= b2
 intBoolExp :: BoolExp -> Bool 
 intBoolExp True_C = True
 intBoolExp False_C = False
---intBoolExp (OpB op v1 v2) = bibOp2 op (intExp v1) (intExp v2) 
+intBoolExp (OpN op v1 v2) = bibOp2 op (intExp v1) (intExp v2) 
 
 -- make sure you write test unit cases for all functions
 

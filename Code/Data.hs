@@ -29,6 +29,8 @@ data Exp =
 data BoolExp = 
     -- binary operator on boolean expressions
     OpB String BoolExp BoolExp
+    -- unairy operators
+    | OpN String Exp Exp 
     -- negation, the only unary operator
     | Not BoolExp
     -- comparison operator: Comp name expression expression

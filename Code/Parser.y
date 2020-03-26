@@ -77,6 +77,8 @@ Exp :: {Exp}
     | '-' Exp { Op1 "-" $2}
     | Exp '+' Exp { Op2 "+" $1 $3 }
     | Exp '*' Exp { Op2 "*" $1 $3 }
+    | Exp '/' Exp { Op2 "/" $1 $3}
+    | Exp '-' Exp { Op2 "-" $1 $3}
     | '(' Exp ')' { $2 } -- ignore brackets
 
 BoolExp :: {BoolExp}
