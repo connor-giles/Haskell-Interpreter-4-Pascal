@@ -34,6 +34,7 @@ biOp2 "/" v1 v2 = v1 / v2
 
 intExp :: Exp -> Float
 intExp (Real v1) = v1 
+intExp (Op1 op e1) = uniOp1 op (intExp e1)
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
 
 biBoolOp1 :: String -> Bool -> Bool

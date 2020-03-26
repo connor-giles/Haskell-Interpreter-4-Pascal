@@ -27,7 +27,8 @@ main = hspec $ do
             uniOp1 "cos" 3.14159265 `shouldBe` (-1.0)
     context "exp" $ do
         it "Performs exp Literally" $ do
-            uniOp1 "exp" 1 `shouldBe` 2.7182817
+            uniOp1 "exp" 1.0 `shouldBe` 2.7182817
+
 
   describe "biOp2" $ do
     context "+" $ do
@@ -48,9 +49,24 @@ main = hspec $ do
     context "Float Literal" $ do
         it "5.0 Literal" $ do
             intExp (Real 5.0) `shouldBe` 5.0
+    context "Negation" $ do
+        it "Negates Floats from AST" $ do
+            intExp (Op1 "-" (Real 2.0)) `shouldBe` (-2.0)
     context "sqrt" $ do
         it "Calculates sqrt from AST" $ do
-            intExp (Real 5.0) `shouldBe` 5.0
+            intExp (Op1 "sqrt" (Real 9.0)) `shouldBe` 3.0
+    context "natlog" $ do
+        it "Calculates natlog from AST" $ do
+            intExp (Op1 "natlog" (Real 2.718)) `shouldBe` 0.999896315728952
+    context "sin" $ do
+        it "Calculates sin from AST" $ do
+            intExp (Op1 "sin" (Real 1.57079633)) `shouldBe` 1.0
+    context "cos" $ do
+        it "Calculates cos from AST" $ do
+            intExp (Op1 "cos" (Real 3.14159265)) `shouldBe` -(1.0)
+    context "exp" $ do
+        it "Calculates exp from AST" $ do
+            intExp (Op1 "exp" (Real 1.0)) `shouldBe` 2.7182817
     context "+" $ do
         it "Adds Floats from AST" $ do
             intExp (Op2 "+" (Real 2.0) (Real 3.0)) `shouldBe` 5.0
@@ -72,6 +88,7 @@ main = hspec $ do
         it "Negates False Literally" $ do
             biBoolOp1 "Not" False `shouldBe` (True)   
 
+
   describe "biBoolOp2" $ do
     context "=" $ do
         it "Tests Equality Literally" $ do
@@ -88,6 +105,7 @@ main = hspec $ do
     context ">=" $ do
         it "Tests Greater Than or Equal Literally" $ do
             biBoolOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+
 
   describe "intBoolExp" $ do
     context "=" $ do
