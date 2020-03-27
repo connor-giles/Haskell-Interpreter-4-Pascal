@@ -48,9 +48,13 @@ data Statement =
     -- Variable assignment
      Assign String GenExp
     -- If statement
-    | If BoolExp Statement Statement
+    | If BoolExp [Statement]
     -- Block
     | Block [Statement]
+    -- While loop
+    | While BoolExp [Statement]
+    -- For loop
+    | For String GenExp BoolExp [Statement]
 
 data VType = REAL | BOOL | STRING;
 

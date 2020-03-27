@@ -131,5 +131,8 @@ main = hspec $ do
     context ">=" $ do
         it "Tests Greater Than or Equal from AST" $ do
             intBoolExp (OpN ">=" (Real 2.0) (Real 3.0)) `shouldBe` False
+    context "Not" $ do
+        it "Tests Not" $ do
+            intBoolExp (Not (OpN "<" (Real 2.0 ) (Real 3.0))) `shouldBe` False
             
 

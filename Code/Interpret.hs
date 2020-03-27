@@ -61,7 +61,7 @@ relationalOp2 ">=" b1 b2 = b1 >= b2
 intBoolExp :: BoolExp -> Bool 
 intBoolExp True_C = True
 intBoolExp False_C = False
---intBoolExp (Not e1) = uniBoolOp1 (intBoolExp e1) THIS WILL TEST NOT IN AST
+intBoolExp (Not e1) = uniBoolOp1 "NOT" (intBoolExp e1) 
 --intBoolExp (OpB op e1 e2) = biBoolOp2 op (intBoolExp e1) (intBoolExp e2) THIS WILL TEST AND/OR IN AST
 intBoolExp (OpN op e1 e2) = relationalOp2 op (intExp e1) (intExp e2) 
 

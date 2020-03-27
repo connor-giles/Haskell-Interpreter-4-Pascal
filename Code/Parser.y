@@ -21,6 +21,13 @@ import Lexer
         int             { Token _ (TokenInt $$)   }
         float           { Token _ (TokenFloat $$) }
         ID              { Token _ (TokenID $$)    }
+        'Program'       { Token _ (TokenK "Program")}
+        'IF'            { Token _ (TokenK "IF")}
+        'WHILE'         { Token _ (TokenK "WHILE")}
+        'DO'            { Token _ (TokenK "DO")}
+        'TO'            { Token _ (TokenK "TO")}
+        'FOR'            { Token _ (TokenK "FOR")}
+        'then'          { Token _ (TokenK "then")}
         '+'             { Token _ (TokenOp "+")   }
         '-'             { Token _ (TokenOp "-")   }
         '*'             { Token _ (TokenOp "*")   }
@@ -62,7 +69,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'begin' Statements 'end' { $2 }
+    : 'Program' ID Defs 'begin' Statements 'end' { $5 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
@@ -119,6 +126,9 @@ GenExp :: {GenExp}
 --More stuff needs to go here
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 }
+    | 'IF' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
+    | 'WHILE' '(' BoolExp ')' 'DO' 'begin' Statements 'end' {While $3 $7}
+    | 'FOR' ID ':=' GenExp 'TO' BoolExp 'DO' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
     
 
 {}
