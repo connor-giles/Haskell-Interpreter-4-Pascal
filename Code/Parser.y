@@ -107,10 +107,10 @@ BoolExp :: {BoolExp}
     : 'true' { True_C }
     | 'false' { False_C }
     | 'not' BoolExp { Not $2 }
-    | Exp '<' Exp { OpN "<" $1 $3 }
-    | Exp '>' Exp { OpN ">" $1 $3 }
-    | Exp '<=' Exp { OpN "<=" $1 $3 }
-    | Exp '>=' Exp { OpN ">=" $1 $3 }
+    | Exp '<' Exp { Comp "<" $1 $3 }
+    | Exp '>' Exp { Comp ">" $1 $3 }
+    | Exp '<=' Exp { Comp "<=" $1 $3 }
+    | Exp '>=' Exp { Comp ">=" $1 $3 }
     | BoolExp 'AND' BoolExp { OpB "AND" $1 $3 }
     | BoolExp 'OR' BoolExp { OpB "OR" $1 $3 }
     | ID { Var_B $1 }

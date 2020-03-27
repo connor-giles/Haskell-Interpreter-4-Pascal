@@ -58,7 +58,7 @@ intBoolExp True_C = True
 intBoolExp False_C = False
 intBoolExp (Not e1) = uniBoolOp1 "NOT" (intBoolExp e1) 
 intBoolExp (OpB op e1 e2) = biBoolOp2 op (intBoolExp e1) (intBoolExp e2) 
-intBoolExp (OpN op e1 e2) = relationalOp2 op (intExp e1) (intExp e2) 
+intBoolExp (Comp op e1 e2) = relationalOp2 op (intExp e1) (intExp e2) 
 
 -- make sure you write test unit cases for all functions
 

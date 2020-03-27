@@ -118,22 +118,22 @@ main = hspec $ do
   describe "intBoolExp" $ do
     context "=" $ do
         it "Tests Equality from AST" $ do
-            intBoolExp (OpN "=" (Real 3.0) (Real 3.0)) `shouldBe` True
+            intBoolExp (Comp "=" (Real 3.0) (Real 3.0)) `shouldBe` True
     context "<" $ do
         it "Tests Less Than from AST" $ do
-            intBoolExp (OpN "<" (Real 2.0) (Real 3.0)) `shouldBe` True
+            intBoolExp (Comp "<" (Real 2.0) (Real 3.0)) `shouldBe` True
     context ">" $ do
         it "Tests Greater Than from AST" $ do
-            intBoolExp (OpN ">" (Real 2.0) (Real 3.0)) `shouldBe` False
+            intBoolExp (Comp ">" (Real 2.0) (Real 3.0)) `shouldBe` False
     context "<=" $ do
         it "Tests Less Than or Equal from AST" $ do
-            intBoolExp (OpN "<=" (Real 3.0) (Real 3.0)) `shouldBe` True
+            intBoolExp (Comp "<=" (Real 3.0) (Real 3.0)) `shouldBe` True
     context ">=" $ do
         it "Tests Greater Than or Equal from AST" $ do
-            intBoolExp (OpN ">=" (Real 2.0) (Real 3.0)) `shouldBe` False
+            intBoolExp (Comp ">=" (Real 2.0) (Real 3.0)) `shouldBe` False
     context "Not" $ do
         it "Tests Not" $ do
-            intBoolExp (Not (OpN "<" (Real 2.0 ) (Real 3.0))) `shouldBe` False
+            intBoolExp (Not (Comp "<" (Real 2.0 ) (Real 3.0))) `shouldBe` False
             intBoolExp (Not True_C) `shouldBe` False
             intBoolExp (Not False_C) `shouldBe` True
     context "AND" $ do
