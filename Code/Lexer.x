@@ -36,13 +36,17 @@ import qualified Data.ByteString.Lazy.Char8 as B
 
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
-  $white+                               ; -- remove multiple white-spaces
-  "//".*                                ; -- skip one line comments
-  [0-9]+\.[0-9]+                        { tok_read       TokenFloat }
-  [\+]|[\-]|[\*]|[\/]|[=]               { tok_string     TokenOp    }
-  [\(]|[\)]|begin|end|true|false        { tok_string     TokenK     }
-  :=|and|or                             { tok_string     TokenOp    }
-  [a-zA-Z][[a-zA-Z0-9]\_\']*            { tok_string     TokenID    }
+  $white+                                         ; -- remove multiple white-spaces
+  "//".*                                          ; -- skip one line comments
+  [0-9]+\.[0-9]+                                  { tok_read       TokenFloat }
+  \+ | \- | \* | \/ | = | \: | \, | \;            { tok_string     TokenOp    }
+  := | \< | > | >= | \<=                          { tok_string     TokenOp    }
+  \( | \) | begin | end | true | false            { tok_string     TokenK     }
+  and | or | not | for | then | var               { tok_string     TokenK     }
+  sqrt | ln | sin | cos | exp                     { tok_string     TokenK     }
+  boolean | real | string                         { tok_string     TokenK     }
+  program | if | while | do | to                  { tok_string     TokenK     }
+  [a-zA-Z][[a-zA-Z0-9]\_\']*                      { tok_string     TokenID    }
 
 {
 

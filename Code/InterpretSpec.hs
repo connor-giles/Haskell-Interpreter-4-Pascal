@@ -18,7 +18,7 @@ main = hspec $ do
             uniOp1 "sqrt" 9.0 `shouldBe` 3.0
     context "natlog" $ do
         it "Performs natural log Literally" $ do
-            uniOp1 "natlog" 2.718 `shouldBe` 0.999896315728952
+            uniOp1 "ln" 2.718 `shouldBe` 0.999896315728952
     context "sin" $ do
         it "Performs sin Literally" $ do
             uniOp1 "sin" 1.57079633 `shouldBe` 1.0
@@ -55,9 +55,9 @@ main = hspec $ do
     context "sqrt" $ do
         it "Calculates sqrt from AST" $ do
             intExp (Op1 "sqrt" (Real 9.0)) `shouldBe` 3.0
-    context "natlog" $ do
-        it "Calculates natlog from AST" $ do
-            intExp (Op1 "natlog" (Real 2.718)) `shouldBe` 0.999896315728952
+    context "ln" $ do
+        it "Calculates ln from AST" $ do
+            intExp (Op1 "ln" (Real 2.718)) `shouldBe` 0.999896315728952
     context "sin" $ do
         it "Calculates sin from AST" $ do
             intExp (Op1 "sin" (Real 1.57079633)) `shouldBe` 1.0
@@ -84,17 +84,17 @@ main = hspec $ do
   describe "uniBoolOp1" $ do
     context "Not" $ do
         it "Negates True Literally" $ do
-            uniBoolOp1 "NOT" True `shouldBe` (False)
+            uniBoolOp1 "not" True `shouldBe` (False)
         it "Negates False Literally" $ do
-            uniBoolOp1 "NOT" False `shouldBe` (True)   
+            uniBoolOp1 "not" False `shouldBe` (True)   
 
   describe "biBoolOp2" $ do
     context "AND" $ do
         it "Tests AND Literally" $ do
-            biBoolOp2 "AND" True False  `shouldBe` (False)
+            biBoolOp2 "and" True False  `shouldBe` (False)
     context "OR" $ do
         it "Tests OR Literally" $ do
-            biBoolOp2 "OR" True False  `shouldBe` (True) 
+            biBoolOp2 "or" True False  `shouldBe` (True) 
 
 
   describe "relationalOp2" $ do
@@ -138,11 +138,11 @@ main = hspec $ do
             intBoolExp (Not False_C) `shouldBe` True
     context "AND" $ do
         it "Tests AND" $ do
-            intBoolExp (OpB "AND" True_C False_C) `shouldBe` False
-            intBoolExp (OpB "AND" True_C True_C) `shouldBe` True
+            intBoolExp (OpB "and" True_C False_C) `shouldBe` False
+            intBoolExp (OpB "and" True_C True_C) `shouldBe` True
     context "OR" $ do
         it "Tests OR" $ do
-            intBoolExp (OpB "OR" True_C False_C) `shouldBe` True
-            intBoolExp (OpB "OR" False_C False_C) `shouldBe` False
+            intBoolExp (OpB "or" True_C False_C) `shouldBe` True
+            intBoolExp (OpB "or" False_C False_C) `shouldBe` False
             
 

@@ -22,11 +22,13 @@ data Exp =
     | FunCall String [Exp]
     -- real value: e.g. Real 1.0
     | Real Float
+    -- variable: e.g. Var "x"
+    | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
     -- binary operator on boolean expressions
-    OpB String BoolExp BoolExp 
+    OpB String BoolExp BoolExp  
     -- negation, the only unary operator
     | Not BoolExp
     -- comparison operator: Comp name expression expression
@@ -34,9 +36,14 @@ data BoolExp =
     -- true and false constants
     | True_C
     | False_C
+    -- not sure what this does rn
     | Var_B String
 
-data GenExp = FloatExp Exp | BExp BoolExp
+data GenExp = 
+    -- float expressions
+    FloatExp Exp 
+    -- boolean expressions
+    | BExp BoolExp
 
 -- Data-structure for statements
 data Statement = 
