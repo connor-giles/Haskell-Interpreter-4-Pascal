@@ -17,20 +17,16 @@ data Exp =
     -- unary operator: Op name expression
     Op1 String Exp
     -- binary operator: Op name leftExpression rightExpression
-    | Op2 String Exp Exp
+    | Op2 String Exp Exp 
     -- function call: FunctionCall name ListArguments
     | FunCall String [Exp]
     -- real value: e.g. Real 1.0
     | Real Float
-    -- variable: e.g. Var "x"
-    | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
     -- binary operator on boolean expressions
-    OpB String BoolExp BoolExp
-    -- unairy operators
-    | OpN String Exp Exp 
+    OpB String BoolExp BoolExp 
     -- negation, the only unary operator
     | Not BoolExp
     -- comparison operator: Comp name expression expression
