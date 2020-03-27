@@ -69,7 +69,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'Program' ID Defs 'begin' Statements 'end' { $5 }
+    : 'Program' ID ';' Defs 'begin' Statements 'end' { $5 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
