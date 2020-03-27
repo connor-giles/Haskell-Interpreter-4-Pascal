@@ -81,30 +81,38 @@ main = hspec $ do
             intExp (Op2 "/" (Real 10.0) (Real 5.0)) `shouldBe` 2.0
 
   
-  describe "biBoolOp1" $ do
+  describe "uniBoolOp1" $ do
     context "Not" $ do
         it "Negates True Literally" $ do
-            biBoolOp1 "Not" True `shouldBe` (False)
+            uniBoolOp1 "NOT" True `shouldBe` (False)
         it "Negates False Literally" $ do
-            biBoolOp1 "Not" False `shouldBe` (True)   
-
+            uniBoolOp1 "NOT" False `shouldBe` (True)   
 
   describe "biBoolOp2" $ do
+    context "AND" $ do
+        it "Tests AND Literally" $ do
+            biBoolOp2 "AND" True False  `shouldBe` (False)
+    context "OR" $ do
+        it "Tests OR Literally" $ do
+            biBoolOp2 "OR" True False  `shouldBe` (True) 
+
+
+  describe "relationalOp2" $ do
     context "=" $ do
         it "Tests Equality Literally" $ do
-            biBoolOp2 "=" 6.0 6.0  `shouldBe` (True)
+            relationalOp2 "=" 6.0 6.0  `shouldBe` (True)
     context "<" $ do
         it "Tests Less Than Literally" $ do
-            biBoolOp2 "<" 5.0 6.0  `shouldBe` (True)
+            relationalOp2 "<" 5.0 6.0  `shouldBe` (True)
     context ">" $ do
         it "Tests Greater Than Literally" $ do
-            biBoolOp2 ">" 5.0 6.0  `shouldBe` (False)  
+            relationalOp2 ">" 5.0 6.0  `shouldBe` (False)  
     context "<=" $ do
         it "Tests Less Than or Equal Literally" $ do
-            biBoolOp2 "<=" 10.0 10.0  `shouldBe` (True) 
+            relationalOp2 "<=" 10.0 10.0  `shouldBe` (True) 
     context ">=" $ do
         it "Tests Greater Than or Equal Literally" $ do
-            biBoolOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+            relationalOp2 ">=" 36.0 55.5  `shouldBe` (False) 
 
 
   describe "intBoolExp" $ do

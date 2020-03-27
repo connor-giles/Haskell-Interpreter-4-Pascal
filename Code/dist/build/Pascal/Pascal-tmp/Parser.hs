@@ -106,7 +106,7 @@ happyExpList = HappyA# "\x00\x00\x00\x08\x00\x00\x00\x00\x00\x08\x00\x00\x00\x80
 {-# NOINLINE happyExpListPerState #-}
 happyExpListPerState st =
     token_strs_expected
-  where token_strs = ["error","%dummy","%start_happyParser","Program","Defs","Definition","Type","ID_List","Exp","BoolExp","Statements","GenExp","Statement","int","float","ID","'+'","'-'","'*'","'/'","'='","'<'","'>'","'<='","'>='","'('","')'","'begin'","'end'","':='","'true'","'false'","'sqrt'","'natlog'","'sin'","'exp'","'cos'","'and'","'or'","'not'","'var'","':'","'bool'","'real'","'string'","','","'ID_List'","%eof"]
+  where token_strs = ["error","%dummy","%start_happyParser","Program","Defs","Definition","Type","ID_List","Exp","BoolExp","Statements","GenExp","Statement","int","float","ID","'+'","'-'","'*'","'/'","'='","'<'","'>'","'<='","'>='","'('","')'","'begin'","'end'","':='","'true'","'false'","'sqrt'","'natlog'","'sin'","'exp'","'cos'","'AND'","'OR'","'not'","'var'","':'","'bool'","'real'","'string'","','","'ID_List'","%eof"]
         bit_start = st * 48
         bit_end = (st + 1) * 48
         read_bit = readArrayBit happyExpList
@@ -447,7 +447,7 @@ happyReduction_29 happy_x_3
 	 =  case happyOut10 happy_x_1 of { (HappyWrap10 happy_var_1) -> 
 	case happyOut10 happy_x_3 of { (HappyWrap10 happy_var_3) -> 
 	happyIn10
-		 (OpB "and" happy_var_1 happy_var_3
+		 (OpB "AND" happy_var_1 happy_var_3
 	)}}
 
 happyReduce_30 :: () => Happy_GHC_Exts.Int# -> Token -> Happy_GHC_Exts.Int# -> Happy_IntList -> HappyStk (HappyAbsSyn ) -> Parser (HappyAbsSyn )
@@ -458,7 +458,7 @@ happyReduction_30 happy_x_3
 	 =  case happyOut10 happy_x_1 of { (HappyWrap10 happy_var_1) -> 
 	case happyOut10 happy_x_3 of { (HappyWrap10 happy_var_3) -> 
 	happyIn10
-		 (OpB "or" happy_var_1 happy_var_3
+		 (OpB "OR" happy_var_1 happy_var_3
 	)}}
 
 happyReduce_31 :: () => Happy_GHC_Exts.Int# -> Token -> Happy_GHC_Exts.Int# -> Happy_IntList -> HappyStk (HappyAbsSyn ) -> Parser (HappyAbsSyn )

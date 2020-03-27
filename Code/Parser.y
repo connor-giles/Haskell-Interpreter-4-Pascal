@@ -42,8 +42,8 @@ import Lexer
         'sin'           { Token _ (TokenK "sin")  }
         'exp'           { Token _ (TokenK "exp")  }
         'cos'           { Token _ (TokenK "false")}
-        'and'           { Token _ (TokenK "and")  }
-        'or'            { Token _ (TokenK "or")   }
+        'AND'           { Token _ (TokenK "and")  }
+        'OR'            { Token _ (TokenK "or")   }
         'not'           { Token _ (TokenK "not")  }
         'var'           { Token _ (TokenK "var")  }
         ':'             { Token _ (TokenK ":")    }
@@ -104,8 +104,8 @@ BoolExp :: {BoolExp}
     | Exp '>' Exp { OpN ">" $1 $3 }
     | Exp '<=' Exp { OpN "<=" $1 $3 }
     | Exp '>=' Exp { OpN ">=" $1 $3 }
-    | BoolExp 'and' BoolExp { OpB "and" $1 $3 }
-    | BoolExp 'or' BoolExp { OpB "or" $1 $3 }
+    | BoolExp 'AND' BoolExp { OpB "AND" $1 $3 }
+    | BoolExp 'OR' BoolExp { OpB "OR" $1 $3 }
     | ID { Var_B $1 }
 
 Statements :: {[Statement]}

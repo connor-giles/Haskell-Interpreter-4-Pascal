@@ -1,12 +1,13 @@
 module Interpret 
 (
     interpret,
+    uniOp1,
     biOp2,
     intExp,
-    intBoolExp,
-    uniOp1,
-    biBoolOp1,
+    uniBoolOp1,
     biBoolOp2,
+    relationalOp2,
+    intBoolExp
 )
 where
 
@@ -17,7 +18,12 @@ import Data
 -- Hint: write separate evaluators for numeric and
 -- boolean expressions and for statements
 
---THIS IS LIKELY WHERE YOU WILL INTERPRET THE INFO
+
+-- TODO
+-- Test NOT from AST
+-- Test AND / OR from AST
+
+
 uniOp1 :: String -> Float -> Float
 uniOp1 "-" v1 = (-v1)
 uniOp1 "sqrt" v1 = sqrt v1
@@ -37,21 +43,27 @@ intExp (Real v1) = v1
 intExp (Op1 op e1) = uniOp1 op (intExp e1)
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
 
-biBoolOp1 :: String -> Bool -> Bool
-biBoolOp1 "Not" True = False
-biBoolOp1 "Not" False = True
+uniBoolOp1 :: String -> Bool -> Bool
+uniBoolOp1 "NOT" True = False
+uniBoolOp1 "NOT" False = True
 
-biBoolOp2 :: String -> Float -> Float -> Bool
-biBoolOp2 "=" b1 b2 = b1 == b2
-biBoolOp2 "<" b1 b2 = b1 < b2
-biBoolOp2 ">" b1 b2 = b1 > b2
-biBoolOp2 "<=" b1 b2 = b1 <= b2
-biBoolOp2 ">=" b1 b2 = b1 >= b2
+biBoolOp2 :: String -> Bool -> Bool -> Bool
+biBoolOp2 "AND" b1 b2 = b1 && b2
+biBoolOp2 "OR" b1 b2 = b1 || b2
+
+relationalOp2 :: String -> Float -> Float -> Bool
+relationalOp2 "=" b1 b2 = b1 == b2
+relationalOp2 "<" b1 b2 = b1 < b2
+relationalOp2 ">" b1 b2 = b1 > b2
+relationalOp2 "<=" b1 b2 = b1 <= b2
+relationalOp2 ">=" b1 b2 = b1 >= b2
 
 intBoolExp :: BoolExp -> Bool 
 intBoolExp True_C = True
 intBoolExp False_C = False
-intBoolExp (OpN op v1 v2) = biBoolOp2 op (intExp v1) (intExp v2) 
+--intBoolExp (Not e1) = uniBoolOp1 (intBoolExp e1) THIS WILL TEST NOT IN AST
+--intBoolExp (OpB op e1 e2) = biBoolOp2 op (intBoolExp e1) (intBoolExp e2) THIS WILL TEST AND/OR IN AST
+intBoolExp (OpN op e1 e2) = relationalOp2 op (intExp e1) (intExp e2) 
 
 -- make sure you write test unit cases for all functions
 
