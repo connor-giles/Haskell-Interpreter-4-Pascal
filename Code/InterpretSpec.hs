@@ -134,5 +134,15 @@ main = hspec $ do
     context "Not" $ do
         it "Tests Not" $ do
             intBoolExp (Not (OpN "<" (Real 2.0 ) (Real 3.0))) `shouldBe` False
+            intBoolExp (Not True_C) `shouldBe` False
+            intBoolExp (Not False_C) `shouldBe` True
+    context "AND" $ do
+        it "Tests AND" $ do
+            intBoolExp (OpB "AND" True_C False_C) `shouldBe` False
+            intBoolExp (OpB "AND" True_C True_C) `shouldBe` True
+    context "OR" $ do
+        it "Tests OR" $ do
+            intBoolExp (OpB "OR" True_C False_C) `shouldBe` True
+            intBoolExp (OpB "OR" False_C False_C) `shouldBe` False
             
 
