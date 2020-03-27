@@ -26,7 +26,7 @@ import Lexer
         'WHILE'         { Token _ (TokenK "WHILE")}
         'DO'            { Token _ (TokenK "DO")}
         'TO'            { Token _ (TokenK "TO")}
-        'FOR'            { Token _ (TokenK "FOR")}
+        'FOR'           { Token _ (TokenK "FOR")}
         'then'          { Token _ (TokenK "then")}
         '+'             { Token _ (TokenOp "+")   }
         '-'             { Token _ (TokenOp "-")   }
@@ -69,7 +69,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'Program' ID Defs 'begin' Statements 'end' { $5 }
+    : 'Program' ID_List Defs 'begin' Statements 'end' {$5}
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list

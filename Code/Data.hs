@@ -67,4 +67,4 @@ data Definition =
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = [Statement]
+type Program =  [Statement]
