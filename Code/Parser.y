@@ -33,7 +33,7 @@ import Lexer
         ':='            { Token _ (TokenOp ":=")      }
         ','             { Token _ (TokenOp ",")       }
         ';'             { Token _ (TokenOp ";")       }
-        ':'             { Token _ (TokenK ":")        }
+        ':'             { Token _ (TokenOp ":")       }
         'program'       { Token _ (TokenK "program")  }
         'if'            { Token _ (TokenK "if")       }
         'while'         { Token _ (TokenK "while")    }
@@ -58,7 +58,7 @@ import Lexer
         'var'           { Token _ (TokenK "var")      } 
         'boolean'       { Token _ (TokenK "boolean")  }
         'real'          { Token _ (TokenK "real")     }
-        'string'        { Token _ (TokenK "string")     }
+        'string'        { Token _ (TokenK "string")   }
         'ID_List'       { Token _ (TokenK "ID_List")  }
 
 -- associativity of operators in reverse precedence order
@@ -70,14 +70,14 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'program' ID ';' Defs 'begin' Statements 'end' { $6 }
+    : 'program' ID ';' Definition 'begin' Statements 'end' { $6 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
     | Definition Defs { $1:$2 } -- put statement as first element of statements
 
 Definition :: {Definition}
-    : 'var' ID_List ':' Type { VarDef $2 $4 }  
+    : 'var' ID_List ':' Type ';' { VarDef $2 $4 }  
 
 
 Type :: {VType}
@@ -127,7 +127,7 @@ GenExp :: {GenExp}
 
 --More stuff needs to go here
 Statement :: {Statement}
-    : ID ':=' GenExp { Assign $1 $3 }
+    : ID ':=' GenExp ';' { Assign $1 $3 }
     | 'if' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
