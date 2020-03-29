@@ -38,7 +38,8 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 tokens :-
   $white+                               ; -- remove multiple white-spaces
   "//" .*                               ; -- skips single line comments
-  "(*" .* "*)"                          ; -- skips multi line comments
+  "(*" .*                               ; -- skips multi line comments
+  .* "*)"                               ; -- skips multi line comments
   $digit+\.$digit*                      { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp  }
   [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp  }
