@@ -67,9 +67,9 @@ intBoolExp (Comp op e1 e2) = relationalOp2 op (intExp e1) (intExp e2)
 
 mapToExp :: Exp -> [Map.Map String (String, String)] -> String
 mapToExp (Real x)  m = (show x);
-mapToExp (Var s) m = if isNothing $ Map.lookup s $ head m
-    then mapToExp (Var s) $ tail m
-    else show $ Map.lookup s $ head m
+mapToExp (Var s) m = if isNothing  (Map.lookup s (head m))
+    then mapToExp (Var s) (tail m)
+    else show (Map.lookup s (head m))
 mapToExp (Var s) [m] = if isNothing $ Map.lookup s m 
     then error("Variable " ++ s ++ " Not Defined")
     else show $ Map.lookup s m
@@ -95,5 +95,9 @@ interpretStart (program:programs) m = let current = interpretStatement program m
 -- Variable name, (variable type, variable value)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)]) -- current statement evaluated  plus scope
 interpretStatement (Write a) m = case a of 
-    FloatExp exp -> let eval = mapToExp exp m in 
+    FloatExp expression -> let eval = mapToExp expression m in 
         ("writeln: >> " ++ eval ++ "\n", m)
+
+interpretStatement (Assign a b) m = case b of 
+    FloatExp expression -> let eval = mapToExp expression m in 
+       (a ++ " is assigned the value " ++ eval ++ "\n", Map.insert a ("Real", eval) (head m) : tail m)

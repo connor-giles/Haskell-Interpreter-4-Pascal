@@ -1,3 +1,5 @@
 begin
-    writeln(13.0)
+    myVar := 13.0
+    writeln(myVar)
+    
 end
