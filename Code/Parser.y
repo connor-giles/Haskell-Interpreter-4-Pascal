@@ -38,12 +38,12 @@ import Lexer
         'true'          { Token _ (TokenK "true")    }
         'false'         { Token _ (TokenK "false")   }
         'sqrt'          { Token _ (TokenK "sqrt")    } 
-        'ln'           { Token _ (TokenK "log")      }
+        'ln'            { Token _ (TokenK "log")      }
         'sin'           { Token _ (TokenK "sin")     }
         'exp'           { Token _ (TokenK "exp")     }
         'cos'           { Token _ (TokenK "false")   }
         'and'           { Token _ (TokenK "and")     }
-        'or'           { Token _ (TokenK "or")       }
+        'or'            { Token _ (TokenK "or")       }
         'not'           { Token _ (TokenK "not")     }
         'for'           { Token _ (TokenK "for")     }
         'to'            { Token _ (TokenK "to")      }
@@ -71,7 +71,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'begin' Statements 'end' { $2 }
+    : Defs 'begin' Statements 'end' { $3 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
@@ -125,7 +125,7 @@ Statements :: {[Statement]}
 
 GenExp :: {GenExp}
     : Exp { FloatExp $1 }
-    | BoolExp { BExp $1 }
+    --| BoolExp { BExp $1 }
 
 --More stuff needs to go here
 Statement :: {Statement}

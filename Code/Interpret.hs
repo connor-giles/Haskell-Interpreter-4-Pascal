@@ -39,7 +39,8 @@ biOp2 "*" v1 v2 = v1 * v2
 biOp2 "/" v1 v2 = v1 / v2
 
 intExp :: Exp -> Float
-intExp (Real v1) = v1 
+intExp (Real v1) = v1
+-- intExp (Var s) = 
 intExp (Op1 op e1) = uniOp1 op (intExp e1)
 intExp (Op2 op e1 e2) = biOp2 op (intExp e1) (intExp e2)
 
@@ -65,14 +66,20 @@ intBoolExp (Not e1) = uniBoolOp1 "not" (intBoolExp e1)
 intBoolExp (OpB op e1 e2) = biBoolOp2 op (intBoolExp e1) (intBoolExp e2) 
 intBoolExp (Comp op e1 e2) = relationalOp2 op (intExp e1) (intExp e2) 
 
+-- intDefinition :: [String] -> VType -> String
+-- intDefinition (VarDef varNames varTypes) = 
+
 mapToExp :: Exp -> [Map.Map String (String, String)] -> String
-mapToExp (Real x)  m = (show x);
-mapToExp (Var s) m = if isNothing  (Map.lookup s (head m))
-    then mapToExp (Var s) (tail m)
-    else show (Map.lookup s (head m))
-mapToExp (Var s) [m] = if isNothing $ Map.lookup s m 
-    then error("Variable " ++ s ++ " Not Defined")
-    else show $ Map.lookup s m
+mapToExp (Real x)  m = (show x)
+mapToExp (Op2 op e1 e2) m = show(intExp (Op2 op e1 e2))
+mapToExp (Var s) m = let f = (Map.lookup s (head m)) in 
+                            case f of
+                            Just f -> (snd f)
+                            Nothing -> mapToExp (Var s) (tail m)
+mapToExp (Var s) [m] = let f = (Map.lookup s m) in 
+                            case f of
+                            Just f -> (snd f)
+                            Nothing -> error("Variable " ++ s ++ " is not in scope")
 
 -- strToBoolExp :: String -> BoolExp
 -- strToBoolExp s = case readMaybe s :: Maybe Bool of
