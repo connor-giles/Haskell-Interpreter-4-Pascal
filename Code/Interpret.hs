@@ -44,11 +44,18 @@ intExpVar s m = let f = (Map.lookup s (head m)) in
                         Just f -> (read(snd f))
                         Nothing -> intExpVar s (tail m)
 
+intBoolExpVar :: String -> [Map.Map String (String, String)] -> Bool
+intBoolExpVar s m = let f = (Map.lookup s (head m)) in
+                        case f of
+                        Just f -> (read(snd f))
+                        Nothing -> intBoolExpVar s (tail m)
+
 intExp :: Exp -> [Map.Map String (String, String)] -> Float
 intExp (Real v1) m = v1
 intExp (Var s) m = intExpVar s m
 intExp (Op1 op e1) m = uniOp1 op (intExp e1 m)
 intExp (Op2 op e1 e2) m = biOp2 op (intExp e1 m) (intExp e2 m)
+
 
 uniBoolOp1 :: String -> Bool -> Bool
 uniBoolOp1 "not" True = False
@@ -65,12 +72,13 @@ relationalOp2 ">" b1 b2 = b1 > b2
 relationalOp2 "<=" b1 b2 = b1 <= b2
 relationalOp2 ">=" b1 b2 = b1 >= b2
 
-intBoolExp :: BoolExp -> [Map.Map String (String, String)] -> Bool 
+intBoolExp :: Exp -> [Map.Map String (String, String)] -> Bool 
 intBoolExp True_C m = True
 intBoolExp False_C m = False
+intBoolExp (Var s) m = intBoolExpVar s m
 intBoolExp (Not e1) m = uniBoolOp1 "not" (intBoolExp e1 m) 
-intBoolExp (OpB op e1 e2) m = biBoolOp2 op (intBoolExp e1 m) (intBoolExp e2 m) 
-intBoolExp (Comp op e1 e2) m = relationalOp2 op (intExp e1 m) (intExp e2 m) 
+intBoolExp (Op2 op e1 e2) m = biBoolOp2 op (intBoolExp e1 m) (intBoolExp e2 m) 
+intBoolExp (Op2 op e1 e2) m = relationalOp2 op (intExp e1 m) (intExp e2 m) 
 
 -- intDefinition :: [String] -> VType -> String
 -- intDefinition (VarDef varNames varTypes) = 
@@ -87,10 +95,7 @@ mapToExp (Var s) [m] = let f = (Map.lookup s m) in
                             Just f -> (snd f)
                             Nothing -> error("Variable " ++ s ++ " is not in scope")
 
--- strToBoolExp :: String -> BoolExp
--- strToBoolExp s = case readMaybe s :: Maybe Bool of
---     Just b -> Boolean b
---     Nothing -> Var_B s
+
 
 -- make sure you write test unit cases for all functions
 
@@ -108,9 +113,10 @@ interpretStart (program:programs) m = let current = interpretStatement program m
 -- Variable name, (variable type, variable value)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)]) -- current statement evaluated  plus scope
 interpretStatement (Write a) m = case a of 
-    FloatExp expression -> let eval = mapToExp expression m in 
-        ("writeln: >> " ++ eval ++ "\n", m)
+    GExp expression -> let eval = mapToExp expression m in
+            ("writeln: >> " ++ eval ++ "\n", m)
 
 interpretStatement (Assign a b) m = case b of 
-    FloatExp expression -> let eval = mapToExp expression m in 
+    GExp expression -> let eval = mapToExp expression m in 
        (a ++ " is assigned the value " ++ eval ++ "\n", Map.insert a ("Real", eval) (head m) : tail m)
+       

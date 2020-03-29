@@ -4,7 +4,7 @@
 module Data
     (
         Exp(..),
-        BoolExp(..),
+       -- BoolExp(..),
         Statement(..),
         VType(..),
         Definition(..),
@@ -24,26 +24,30 @@ data Exp =
     | Real Float
     -- variable: e.g. Var "x"
     | Var String
-
--- Data-structure for boolean expressions
-data BoolExp = 
-    -- binary operator on boolean expressions
-    OpB String BoolExp BoolExp  
-    -- negation, the only unary operator
-    | Not BoolExp
-    -- comparison operator: Comp name expression expression
-    | Comp String Exp Exp
-    -- true and false constants
+    | Not Exp
     | True_C
     | False_C
     -- not sure what this does rn
-    | Var_B String
+
+-- Data-structure for boolean expressions
+-- data BoolExp = 
+--     -- binary operator on boolean expressions
+--     OpB String BoolExp BoolExp  
+--     -- negation, the only unary operator
+--     | Not BoolExp
+--     -- comparison operator: Comp name expression expression
+--     | Comp String Exp Exp
+--     -- true and false constants
+--     | True_C
+--     | False_C
+--     -- not sure what this does rn
+--     | Var_B String
 
 data GenExp = 
     -- float expressions
-    FloatExp Exp 
+    GExp Exp 
     -- boolean expressions
-    | BExp BoolExp
+ --   | BExp BoolExp
 
 -- Data-structure for statements
 data Statement = 
@@ -51,13 +55,13 @@ data Statement =
     -- Variable assignment
      Assign String GenExp
     -- If statement
-    | If BoolExp [Statement]
+    | If Exp [Statement]
     -- Block
     | Block [Statement]
     -- While loop
-    | While BoolExp [Statement]
+    | While Exp [Statement]
     -- For loop
-    | For String GenExp BoolExp [Statement]
+    | For String GenExp Exp [Statement]
     -- Write
     | Write GenExp
 

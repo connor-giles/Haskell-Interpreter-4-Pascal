@@ -104,35 +104,34 @@ Exp :: {Exp}
     | Exp '/' Exp { Op2 "/" $1 $3 }
     | Exp '-' Exp { Op2 "-" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
+    |'true' { True_C }
+    | 'false' { False_C }
+    | 'not' Exp { Not $2 }
+    | Exp '<' Exp { Op2 "<" $1 $3 }
+    | Exp '>' Exp { Op2 ">" $1 $3 }
+    | Exp '<=' Exp { Op2 "<=" $1 $3 }
+    | Exp '>=' Exp { Op2 ">=" $1 $3 }
+    | Exp 'and' Exp { Op2 "and" $1 $3 }
+    | Exp 'or' Exp { Op2 "or" $1 $3 }
     | ID { Var $1 }
     | float {Real $1}
+    
 
-BoolExp :: {BoolExp}
-    : 'true' { True_C }
-    | 'false' { False_C }
-    | 'not' BoolExp { Not $2 }
-    | Exp '<' Exp { Comp "<" $1 $3 }
-    | Exp '>' Exp { Comp ">" $1 $3 }
-    | Exp '<=' Exp { Comp "<=" $1 $3 }
-    | Exp '>=' Exp { Comp ">=" $1 $3 }
-    | BoolExp 'and' BoolExp { OpB "and" $1 $3 }
-    | BoolExp 'or' BoolExp { OpB "or" $1 $3 }
-    | ID { Var_B $1 }
+
 
 Statements :: {[Statement]}
     : { [] } -- nothing; make empty list
     | Statement Statements { $1:$2 } -- put statement as first element of statements
 
 GenExp :: {GenExp}
-    : Exp { FloatExp $1 }
-    --| BoolExp { BExp $1 }
+    : Exp { GExp $1 }
 
 --More stuff needs to go here
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 }
-    | 'if' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
-    | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
-    | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
+    | 'if' '(' Exp ')'  'then' 'begin' Statements  'end' {If $3 $7}
+    | 'while' '(' Exp ')' 'do' 'begin' Statements 'end' {While $3 $7}
+    | 'for' ID ':=' GenExp 'to' Exp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' {Write $3}
     
 
