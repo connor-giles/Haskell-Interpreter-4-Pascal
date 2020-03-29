@@ -21,7 +21,9 @@ data Exp =
     -- function call: FunctionCall name ListArguments
     | FunCall String [Exp]
     -- real value: e.g. Real 1.0
-    | Real Float
+    | Real Float 
+    -- For declared variables
+    | Var String
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -34,7 +36,10 @@ data BoolExp =
     -- true and false constants
     | True_C
     | False_C
+    -- For declared variables
     | Var_B String
+    -- boolean value: e.g. Bool False 
+    | Boolean Bool
 
 data GenExp = FloatExp Exp | BExp BoolExp
 
@@ -51,6 +56,8 @@ data Statement =
     | While BoolExp [Statement]
     -- For loop
     | For String GenExp BoolExp [Statement]
+    -- Write
+    | Write Exp
 
 data VType = REAL | BOOL | STRING;
 
@@ -59,6 +66,8 @@ data Definition =
     VarDef [String] VType
     -- Procedures
     | Proc String [(String, VType)] Statement
+
+
  
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff

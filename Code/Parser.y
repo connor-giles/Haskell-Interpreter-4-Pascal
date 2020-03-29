@@ -28,6 +28,7 @@ import Lexer
         'TO'            { Token _ (TokenK "TO")}
         'FOR'           { Token _ (TokenK "FOR")}
         'then'          { Token _ (TokenK "then")}
+        "WRITELN"         { Token _ (TokenK "WRITELN") }
         '+'             { Token _ (TokenOp "+")   }
         '-'             { Token _ (TokenOp "-")   }
         '*'             { Token _ (TokenOp "*")   }
@@ -129,6 +130,6 @@ Statement :: {Statement}
     | 'IF' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
     | 'WHILE' '(' BoolExp ')' 'DO' 'begin' Statements 'end' {While $3 $7}
     | 'FOR' ID ':=' GenExp 'TO' BoolExp 'DO' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
-    
+    | "WRITELN" '(' GenExp ')' {Write $3}
 
 {}
