@@ -1,6 +1,7 @@
 module Interpret 
 (
     interpret,
+    interpretEntry,
     uniOp1,
     biOp2,
     intExp,
@@ -12,6 +13,9 @@ module Interpret
 where
 
 import Data
+import Data.Maybe (isNothing)
+import qualified Data.Map.Strict as Map
+import Debug.Trace
 
 -- TODO: define auxiliary functions to aid interpretation
 -- Feel free to put them here or in different modules
@@ -64,4 +68,14 @@ intBoolExp (Comp op e1 e2) = relationalOp2 op (intExp e1) (intExp e2)
 
 interpret :: Program -> String
 -- TODO: write the interpreter
-interpret _ = "Not implemented"
+-- interpret _ = "Not implemented"
+interpret [] = ""
+interpret x = interpretEntry x [Map.empty]
+
+
+-- this is the entry point of the interpretation
+interpretEntry :: Program -> [Map.Map String (String, String)] -> String
+interpretEntry [] scope = ""
+interpretEntry (x:xs) scope = let current = interpretStatement x scope in
+        (fst current) ++ (interpretEntry xs (snd current))
+
