@@ -30,24 +30,23 @@ import qualified Data.ByteString.Lazy.Char8 as B
 
 %wrapper "monadUserState-bytestring"
 
--- $digit = [0-9]                  -- digits
--- $alpha = [a-zA-Z]               -- alphabetic characters
+$digit = 0-9                    -- digits
+$alpha = [a-zA-Z]               -- alphabetic characters
 
 
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
-  $white+                                         ; -- remove multiple white-spaces
-  "//".*                                          ; -- skip one line comments
-  [0-9]+\.[0-9]+                                  { tok_read       TokenFloat }
-  \+ | \- | \* | \/ | = | \: | \, | \;            { tok_string     TokenOp    }
-  := | \< | > | >= | \<=                          { tok_string     TokenOp    }
-  \( | \) | begin | end | true | false            { tok_string     TokenK     }
-  and | or | not | for | then | var               { tok_string     TokenK     }
-  sqrt | ln | sin | cos | exp                     { tok_string     TokenK     }
-  boolean | real | string                         { tok_string     TokenK     }
-  program | if | while | do | to                  { tok_string     TokenK     }
-  [a-zA-Z][[a-zA-Z0-9]\_\']*                      { tok_string     TokenID    }
-
+  $white+                               ; -- remove multiple white-spaces
+  "//".*                                ; -- skip one line comments
+  $digit+\.$digit*                      { tok_read     TokenFloat }
+  [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp  }
+  [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp  }
+  [\(]|[\)]|begin|end|true|false        { tok_string     TokenK   }
+  [\:]|and|not|var|bool|real|string     { tok_string     TokenK   }
+  while|do|for|to|writeln               { tok_string     TokenK   }
+  [\,]|ID_List|program                  { tok_string     TokenK   }
+  sqrt|ln|sin|cos                       { tok_string     TokenK   }
+  $alpha [$alpha $digit \_ \']*         { tok_string     TokenID  }
 {
 
 -- Some action helpers:
@@ -71,8 +70,8 @@ data TokenClass
  = TokenOp     String
  | TokenK      String
  | TokenInt    Int
- | TokenFloat  Float
- | TokenID     String
+ | TokenFloat   Float
+ | TokenID    String
  | TokenEOF
  deriving (Eq, Show)
 

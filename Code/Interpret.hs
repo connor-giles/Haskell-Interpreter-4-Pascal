@@ -1,7 +1,7 @@
 module Interpret 
 (
     interpret,
-    interpretEntry,
+    interpretStart,
     uniOp1,
     biOp2,
     intExp,
@@ -74,10 +74,10 @@ mapToExp (Var s) [m] = if isNothing $ Map.lookup s m
     then error("Variable " ++ s ++ " Not Defined")
     else show $ Map.lookup s m
 
-strToBoolExp :: String -> BoolExp
-strToBoolExp s = case readMaybe s :: Maybe Bool of
-    Just b -> Boolean b
-    Nothing -> Var_B s
+-- strToBoolExp :: String -> BoolExp
+-- strToBoolExp s = case readMaybe s :: Maybe Bool of
+--     Just b -> Boolean b
+--     Nothing -> Var_B s
 
 -- make sure you write test unit cases for all functions
 
@@ -89,10 +89,11 @@ interpret program = interpretStart program [Map.empty]
 
 interpretStart :: Program -> [Map.Map String (String, String)] -> String
 interpretStart [] m = "";
-interpretStart (program:programs) map = let current = interpretStatement program map in
+interpretStart (program:programs) m = let current = interpretStatement program m in
     (fst current) ++ (interpretStart programs $ snd current)
 
+-- Variable name, (variable type, variable value)
 interpretStatement :: Statement -> [Map.Map String (String, String)] -> (String, [Map.Map String (String, String)]) -- current statement evaluated  plus scope
 interpretStatement (Write a) m = case a of 
     FloatExp exp -> let eval = mapToExp exp m in 
-        trace ("exp is " ++ eval)(eval ++ "\n", m)
+        ("writeln: >> " ++ eval ++ "\n", m)

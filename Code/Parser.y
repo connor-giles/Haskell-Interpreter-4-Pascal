@@ -18,49 +18,49 @@ import Lexer
 -- TokenK is for keyword
 -- TokenOp is for operator
 %token
-        int             { Token _ (TokenInt $$)       }
-        float           { Token _ (TokenFloat $$)     }
-        ID              { Token _ (TokenID $$)        }
-        '+'             { Token _ (TokenOp "+")       }
-        '-'             { Token _ (TokenOp "-")       }
-        '*'             { Token _ (TokenOp "*")       }
-        '/'             { Token _ (TokenOp "/")       }
-        '='             { Token _ (TokenOp "=")       }
-        '<'             { Token _ (TokenOp "<")       }
-        '>'             { Token _ (TokenOp ">")       }
-        '<='            { Token _ (TokenOp "<=")      }
-        '>='            { Token _ (TokenOp ">=")      }
-        ':='            { Token _ (TokenOp ":=")      }
-        ','             { Token _ (TokenOp ",")       }
-        ';'             { Token _ (TokenOp ";")       }
-        ':'             { Token _ (TokenOp ":")       }
-        'program'       { Token _ (TokenK "program")  }
-        'if'            { Token _ (TokenK "if")       }
-        'while'         { Token _ (TokenK "while")    }
-        'do'            { Token _ (TokenK "do")       }
-        'to'            { Token _ (TokenK "to")       }
-        'for'           { Token _ (TokenK "for")      }
-        'then'          { Token _ (TokenK "then")     }
-        'writeln'       { Token _ (TokenK "writeln")  }
-        '('             { Token _ (TokenK  "(")       }
-        ')'             { Token _ (TokenK  ")")       }
-        'begin'         { Token _ (TokenK "begin")    }
-        'end'           { Token _ (TokenK "end")      }
-        'true'          { Token _ (TokenK "true")     }
-        'false'         { Token _ (TokenK "false")    }
-        'sqrt'          { Token _ (TokenK "sqrt")     } 
-        'ln'            { Token _ (TokenK "ln")       }
-        'sin'           { Token _ (TokenK "sin")      }
-        'exp'           { Token _ (TokenK "exp")      }
-        'cos'           { Token _ (TokenK "false")    }
-        'and'           { Token _ (TokenK "and")      }
-        'or'            { Token _ (TokenK "or")       }
-        'not'           { Token _ (TokenK "not")      }
-        'var'           { Token _ (TokenK "var")      } 
-        'boolean'       { Token _ (TokenK "boolean")  }
-        'real'          { Token _ (TokenK "real")     }
-        'string'        { Token _ (TokenK "string")   }
-        'ID_List'       { Token _ (TokenK "ID_List")  }
+        int             { Token _ (TokenInt $$)      }
+        float           { Token _ (TokenFloat $$)    }
+        ID              { Token _ (TokenID $$)       }
+        '<'             { Token _ (TokenOp "<")      }
+        '>'             { Token _ (TokenOp ">")      }
+        '<='            { Token _ (TokenOp "<=")     }
+        '>='            { Token _ (TokenOp ">=")     }
+        '+'             { Token _ (TokenOp "+")      }
+        '-'             { Token _ (TokenOp "-")      }
+        '*'             { Token _ (TokenOp "*")      }
+        '/'             { Token _ (TokenOp "/")      }
+        '='             { Token _ (TokenOp "=")      }
+        ':='            { Token _ (TokenOp ":=")     }
+        '('             { Token _ (TokenK  "(")      }
+        ')'             { Token _ (TokenK  ")")      }
+        'begin'         { Token _ (TokenK "begin")   }
+        'end'           { Token _ (TokenK "end")     }
+        'true'          { Token _ (TokenK "true")    }
+        'false'         { Token _ (TokenK "false")   }
+        'sqrt'          { Token _ (TokenK "sqrt")    } 
+        'ln'           { Token _ (TokenK "log")      }
+        'sin'           { Token _ (TokenK "sin")     }
+        'exp'           { Token _ (TokenK "exp")     }
+        'cos'           { Token _ (TokenK "false")   }
+        'and'           { Token _ (TokenK "and")     }
+        'or'           { Token _ (TokenK "or")       }
+        'not'           { Token _ (TokenK "not")     }
+        'for'           { Token _ (TokenK "for")     }
+        'to'            { Token _ (TokenK "to")      }
+        'while'         { Token _ (TokenK "while")   }
+        'do'            { Token _ (TokenK "do")      }
+        'var'           { Token _ (TokenK "var")     }
+        ':'             { Token _ (TokenK ":")       }
+        'boolean'       { Token _ (TokenK "bool")    }
+        'real'          { Token _ (TokenK "real")    }
+        'string'        { Token _ (TokenK "string")  }
+        ','             { Token _ (TokenK ",")       }
+        ';'             { Token _ (TokenK ";")       }
+        'ID_List'       { Token _ (TokenK "ID_List") }
+        'program'       { Token _ (TokenK "program") }
+        'writeln'       { Token _ (TokenK "writeln") }
+        'if'            { Token _ (TokenK "if")      }
+        'then'          { Token _ (TokenK "then")    }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -71,7 +71,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : 'program' ID ';' Definition 'begin' Statements 'end' { $6 }
+    : 'begin' Statements 'end' { $2 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
@@ -105,6 +105,7 @@ Exp :: {Exp}
     | Exp '-' Exp { Op2 "-" $1 $3 }
     | '(' Exp ')' { $2 } -- ignore brackets
     | ID { Var $1 }
+    | float {Real $1}
 
 BoolExp :: {BoolExp}
     : 'true' { True_C }
@@ -128,7 +129,7 @@ GenExp :: {GenExp}
 
 --More stuff needs to go here
 Statement :: {Statement}
-    : ID ':=' GenExp ';' { Assign $1 $3 }
+    : ID ':=' GenExp { Assign $1 $3 }
     | 'if' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
