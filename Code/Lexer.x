@@ -37,7 +37,8 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
   $white+                               ; -- remove multiple white-spaces
-  "(*" .* "*)"                            ; -- skip one line comments
+  "//" .*                               ; -- skips single line comments
+  "(*" .* "*)"                          ; -- skips multi line comments
   $digit+\.$digit*                      { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp  }
   [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp  }
