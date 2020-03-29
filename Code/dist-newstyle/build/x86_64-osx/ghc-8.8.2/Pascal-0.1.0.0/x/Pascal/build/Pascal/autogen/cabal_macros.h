@@ -44,6 +44,17 @@
   (major1) == 0 && (major2) == 10 && (minor) <= 10)
 #endif /* MIN_VERSION_bytestring */
 
+/* package containers-0.6.2.1 */
+#ifndef VERSION_containers
+#define VERSION_containers "0.6.2.1"
+#endif /* VERSION_containers */
+#ifndef MIN_VERSION_containers
+#define MIN_VERSION_containers(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  6 || \
+  (major1) == 0 && (major2) == 6 && (minor) <= 2)
+#endif /* MIN_VERSION_containers */
+
 /* package hspec-2.7.1 */
 #ifndef VERSION_hspec
 #define VERSION_hspec "2.7.1"

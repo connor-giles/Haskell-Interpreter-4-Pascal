@@ -38,6 +38,8 @@ data BoolExp =
     | False_C
     -- not sure what this does rn
     | Var_B String
+    -- boolean value: e.g. Bool False 
+    | Boolean Bool
 
 data GenExp = 
     -- float expressions
@@ -58,6 +60,8 @@ data Statement =
     | While BoolExp [Statement]
     -- For loop
     | For String GenExp BoolExp [Statement]
+    -- Write
+    | Write Exp
 
 data VType = REAL | BOOL | STRING;
 
@@ -66,8 +70,10 @@ data Definition =
     VarDef [String] VType
     -- Procedures
     | Proc String [(String, VType)] Statement
+
+
  
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = [Statement]
+type Program =  [Statement]
