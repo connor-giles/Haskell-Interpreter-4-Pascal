@@ -9,8 +9,17 @@ module Data
         VType(..),
         Definition(..),
         GenExp(..),
+        Value(..),
+        toFloat,
+        toBool,
+        putVal,
+        updateVal,
+        retrieveVal,
         Program
+        
     ) where
+
+import qualified Data.Map.Strict as Map
 
 -- Data-structure for  numeric expressions
 data Exp = 
@@ -24,6 +33,7 @@ data Exp =
     | Real Float
     -- variable: e.g. Var "x"
     | Var String
+    deriving (Show, Eq)
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -38,12 +48,14 @@ data BoolExp =
     | False_C
     -- not sure what this does rn
     | Var_B String
+    deriving (Show, Eq)
 
 data GenExp = 
     -- float expressions
     FloatExp Exp 
     -- boolean expressions
     | BExp BoolExp
+    deriving (Show, Eq)
 
 -- Data-structure for statements
 data Statement = 
@@ -69,8 +81,36 @@ data Definition =
     -- Procedures
     | Proc String [(String, VType)] Statement
 
+-- this is a wrapper like object that contains everything our map will need
+data Value = 
+    -- float values
+    R Float
+    -- boolean values
+    | B Bool
+    deriving (Show, Eq)
 
- 
+-- converts Values to Floats
+toFloat :: Value -> Float
+toFloat (R val) = val
+toFloat (B val) = error "value not convertible to float"
+
+-- converts Values to Booleans
+toBool :: Value -> Bool
+toBool (B val) = val
+toBool (R val) = error "value not convertible to boolean"
+
+-- puts new values into the map
+putVal :: Map.Map String Value -> String -> Value -> Map.Map String Value
+putVal mapName key val = Map.insert key val mapName
+
+retrieveVal :: Map.Map String Value -> String -> Value
+retrieveVal mapName key = case Map.lookup key mapName of
+        Nothing -> error "Key did not have associated value"
+        Just val -> val
+
+updateVal :: Map.Map String Value -> String -> Value -> Map.Map String Value
+updateVal mapName key val = Map.insert key val mapName 
+
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
