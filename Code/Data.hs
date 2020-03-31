@@ -12,6 +12,7 @@ module Data
         Value(..),
         toFloat,
         toBool,
+        toString,
         putVal,
         updateVal,
         retrieveVal,
@@ -87,17 +88,26 @@ data Value =
     R Float
     -- boolean values
     | B Bool
+    -- String values
+    | S String
     deriving (Show, Eq)
 
 -- converts Values to Floats
 toFloat :: Value -> Float
 toFloat (R val) = val
 toFloat (B val) = error "value not convertible to float"
+toFloat (S val) = error "value not convertible to float"
 
 -- converts Values to Booleans
 toBool :: Value -> Bool
 toBool (B val) = val
 toBool (R val) = error "value not convertible to boolean"
+toBool (S val) = error "value not convertible to boolean"
+
+toString ::  Value -> String
+toString (B val) = show(val)
+toString (R val) = show(val)
+toString (S val) = show(val)
 
 -- puts new values into the map
 putVal :: Map.Map String Value -> String -> Value -> Map.Map String Value

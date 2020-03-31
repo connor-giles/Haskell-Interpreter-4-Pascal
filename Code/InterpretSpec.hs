@@ -130,3 +130,29 @@ main = hspec $ do
         it "tests interpretation of a variable's value" $ do
             intBoolExp (Var_B "test1") (Map.fromList [("test1", B False)]) `shouldBe` (B False)
             intBoolExp (Var_B "test1") (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+
+  -- UNIT TESTS FOR intGenExp
+  describe "intGenExp" $ do
+    context "Float Expressions" $ do
+        it "tests float expresssions" $ do
+            intGenExp (FloatExp (Real 5.0)) (Map.fromList [("test1", B True)]) `shouldBe` (R 5.0)
+        it "tests boolean expresssions" $ do
+            intGenExp (BExp True_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+
+  -- UNIT TESTS FOR intStatement
+  describe "intStatement" $ do
+    context "Float Expressions" $ do
+        it "tests assignment of float" $ do
+            intStatement (Assign "test2" (FloatExp (Real 10.0))) (Map.fromList [("test1", R 5.0)]) `shouldBe` (Map.fromList [("test1", R 5.0), ("test2", R 10.0)])
+    context "Boolean Expressions" $ do
+        it "tests assignment of booleans" $ do
+            intStatement (Assign "test2" (BExp (True_C))) (Map.fromList [("test1", R 5.0)]) `shouldBe` (Map.fromList [("test1", R 5.0), ("test2", B True)])
+
+
+  describe "intWriteln" $ do
+    context "Float Expressions" $ do
+        it "tests writeln of float" $ do
+            intWriteln (Write (FloatExp(Real 10.0))) (Map.fromList [("test1", R 5.0)]) `shouldBe` "10.0"
+    context "Boolean Expressions" $ do
+        it "tests writeln of boolean" $ do
+            intWriteln (Write (BExp(True_C))) (Map.fromList [("test1", R 5.0)]) `shouldBe` "True"
