@@ -22,17 +22,22 @@ import qualified Data.Map.Strict as Map
 intExp :: Exp -> Map.Map String Value -> Value
 intExp (Real e1) _ = (R e1)
 intExp (Var e1) m = (retrieveVal m e1)
+intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
 intExp (Op1 "sqrt" e1) m = (R (sqrt (toFloat(intExp e1 m))))
 intExp (Op1 "ln" e1) m = (R (log (toFloat(intExp e1 m))))
 intExp (Op1 "sin" e1) m = (R (sin (toFloat(intExp e1 m))))
 intExp (Op1 "cos" e1) m = (R (cos (toFloat(intExp e1 m))))
 intExp (Op1 "exp" e1) m = (R (exp (toFloat(intExp e1 m))))
 intExp (Op2 "+" e1 e2) m = (R (toFloat(intExp e1 m) + toFloat(intExp e2 m) ))
-intExp (Op2 "_" e1 e2) m = (R (toFloat(intExp e1 m) - toFloat(intExp e2 m) ))
+intExp (Op2 "-" e1 e2) m = (R (toFloat(intExp e1 m) - toFloat(intExp e2 m) ))
 intExp (Op2 "*" e1 e2) m = (R (toFloat(intExp e1 m) * toFloat(intExp e2 m) ))
+intExp (Op2 "/" _ (Real 0.0)) _ = error "Cannot divide by zero"
 intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
 intExp _ _ = error "Not Valid intExp"
 
+intBoolExp :: BoolExp -> Map.Map String Value -> Value
+boolExp (True_C) _ = (B True)
+boolExp (False_C) _ = (B False)
 
 interpret :: Program -> String
 -- TODO: write the interpreter
