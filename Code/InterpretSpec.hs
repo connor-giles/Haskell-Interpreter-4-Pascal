@@ -10,6 +10,8 @@ import qualified Data.Map.Strict as Map
 
 main :: IO ()
 main = hspec $ do
+
+  -- UNIT TESTS FOR intExp  
   describe "intExp" $ do
     context "Literals" $ do
         it "tests 5.0 as a literal" $ do
@@ -67,3 +69,64 @@ main = hspec $ do
     context "Variable Interpretation" $ do
         it "tests interpretation of a variable's value" $ do
             intExp (Var "test1") (Map.fromList [("test1", R 1.0)]) `shouldBe` (R 1.0)
+
+
+
+  -- UNIT TESTS FOR intBoolExp
+  describe "intBoolExp" $ do
+    context "Literals" $ do
+        it "tests True as a literal" $ do
+            intBoolExp (True_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests False as a literal" $ do
+            intBoolExp (False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+    context "Not" $ do
+        it "tests negation of True" $ do
+            intBoolExp (Not True_C) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests negation of False" $ do
+            intBoolExp (Not False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+    context "And" $ do
+        it "tests and on True and False" $ do
+            intBoolExp (OpB "and" True_C False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests and on False and False" $ do
+            intBoolExp (OpB "and" False_C False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests and on True and True" $ do
+            intBoolExp (OpB "and" True_C True_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+    context "Or" $ do
+        it "tests or on True or False" $ do
+            intBoolExp (OpB "or" True_C False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests or on False or False" $ do
+            intBoolExp (OpB "or" False_C False_C) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests or on True or True" $ do
+            intBoolExp (OpB "or" True_C True_C) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+    context "Less Than" $ do
+        it "tests less than on a larger float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 10.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests less than on a smaller float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 0.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests less than on same float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 1.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+    context "Less Than Equal" $ do
+        it "tests less than equal on a larger float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 10.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests less than equal on a smaller float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 0.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests less than equal on same float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 1.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+    context "Greater Than" $ do
+        it "tests greater than on a larger float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 10.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests greater than on a smaller float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 0.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests greater than on same float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 1.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+    context "Greater Than Equal" $ do
+        it "tests greater than equal on a larger float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 10.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B False)
+        it "tests greater than equal on a smaller float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 0.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+        it "tests greater than equal on same float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 1.0)) (Map.fromList [("test1", B True)]) `shouldBe` (B True)
+    context "Variable Interpretation" $ do
+        it "tests interpretation of a variable's value" $ do
+            intBoolExp (Var_B "test1") (Map.fromList [("test1", B False)]) `shouldBe` (B False)
+            intBoolExp (Var_B "test1") (Map.fromList [("test1", B True)]) `shouldBe` (B True)

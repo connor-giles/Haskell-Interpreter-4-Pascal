@@ -1,7 +1,8 @@
 module Interpret 
 (
     interpret,
-    intExp
+    intExp,
+    intBoolExp
 )
 where
 
@@ -21,7 +22,7 @@ import qualified Data.Map.Strict as Map
 
 intExp :: Exp -> Map.Map String Value -> Value
 intExp (Real e1) _ = (R e1)
-intExp (Var e1) m = (retrieveVal m e1)
+intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
 intExp (Op1 "sqrt" e1) m = (R (sqrt (toFloat(intExp e1 m))))
 intExp (Op1 "ln" e1) m = (R (log (toFloat(intExp e1 m))))
@@ -36,8 +37,18 @@ intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
 intExp _ _ = error "Not Valid intExp"
 
 intBoolExp :: BoolExp -> Map.Map String Value -> Value
-boolExp (True_C) _ = (B True)
-boolExp (False_C) _ = (B False)
+intBoolExp (True_C) _ = (B True)
+intBoolExp (False_C) _ = (B False)
+intBoolExp (Var_B v1) m = (retrieveVal m v1)
+intBoolExp (Not e1) m = (B (not (toBool(intBoolExp e1 m))))
+intBoolExp (OpB "and" e1 e2) m = (B ((toBool(intBoolExp e1 m)) && (toBool(intBoolExp e2 m))))
+intBoolExp (OpB "or" e1 e2) m = (B ((toBool(intBoolExp e1 m)) || (toBool(intBoolExp e2 m))))
+intBoolExp (Comp ">" e1 e2) m = (B ((toFloat(intExp e1 m)) > (toFloat(intExp e2 m))))
+intBoolExp (Comp ">=" e1 e2) m = (B ((toFloat(intExp e1 m)) >= (toFloat(intExp e2 m))))
+intBoolExp (Comp "<" e1 e2) m = (B ((toFloat(intExp e1 m)) < (toFloat(intExp e2 m))))
+intBoolExp (Comp "<=" e1 e2) m = (B ((toFloat(intExp e1 m)) <= (toFloat(intExp e2 m))))
+intBoolExp _ _ = error "Not Valid intBoolExp"
+
 
 interpret :: Program -> String
 -- TODO: write the interpreter
