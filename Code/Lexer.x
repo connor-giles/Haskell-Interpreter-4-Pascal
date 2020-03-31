@@ -37,6 +37,7 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
   $white+                               ; -- remove multiple white-spaces
+  "program" .*                          ;
   "//" .*                               ; -- skips single line comments
   "(*" .*                               ; -- skips multi line comments
   .* "*)"                               ; -- skips multi line comments

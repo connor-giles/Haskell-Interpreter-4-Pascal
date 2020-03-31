@@ -125,7 +125,7 @@ Statements :: {[Statement]}
 
 GenExp :: {GenExp}
     : Exp { FloatExp $1 }
-    --| BoolExp { BExp $1 }
+    | BoolExp { BExp $1 }
 
 --More stuff needs to go here
 Statement :: {Statement}
