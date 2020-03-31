@@ -71,14 +71,14 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : Defs 'begin' Statements 'end' { $3 }
+    :'program' ID Defs 'begin' Statements 'end' { $5 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
     | Definition Defs { $1:$2 } -- put statement as first element of statements
 
 Definition :: {Definition}
-    : 'var' ID_List ':' Type ';' { VarDef $2 $4 }  
+    : 'var' ID_List ':' Type  { VarDef $2 $4 }  
 
 
 Type :: {VType}
