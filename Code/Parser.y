@@ -74,7 +74,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    :'program' ID Defs 'begin' Statements 'end' { ($3, $5) }
+    : Defs 'begin' Statements 'end' { $3 }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
@@ -133,9 +133,9 @@ GenExp :: {GenExp}
 --More stuff needs to go here
 Statement :: {Statement}
     : ID ':=' GenExp { Assign $1 $3 }
-    | 'if' '(' BoolExp ')'  'then' Statements 'else' Statements {If $3 $6 $8}
+    | 'if' '(' BoolExp ')' 'then' Statements 'else' Statements {If $3 $6 $8}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
-    | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
+    | 'for' ID ':=' GenExp 'to' GenExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' {Write $3}
     | 'Continue' {Continue_S}
     | 'Break' {Break_S}

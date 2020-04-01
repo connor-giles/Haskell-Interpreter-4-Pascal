@@ -14,8 +14,6 @@ import Data
 
 
 import qualified Data.Map.Strict as Map
---import Data.Maybe()
---import Text.Read()
 
 -- TODO: define auxiliary functions to aid interpretation
 -- Feel free to put them here or in different modules
@@ -59,7 +57,7 @@ intGenExpVal (BExp e1) m = (intBoolExp e1 m)
 
 intGenExpType :: GenExp -> Map.Map String (String, Value) -> String
 intGenExpType (FloatExp _) _ = "Real"
-intGenExpType (BExp _) _ = "Boolean"
+intGenExpType (BExp _) _ = "Boolean" 
 
 -- intVarDef :: [String] -> VType -> Map.Map String (String, Value) -- creates global scope
 -- intVarDef list v = $ \list -> do 
@@ -76,14 +74,9 @@ intWriteln (Write value) m = toString(intGenExpVal value m)
 intWriteln _ _ = error "Invalid Writeln"
 
 
--- interpretStart :: [Statement] -> Map.Map String Value -> String
--- interpretStart (x:xs) m = let current = intStatement x m in
---     (fst current) ++ (interpretStart xs (snd current))
-
-
-interpret :: (Program, Map.Map String (String, Value)) -> String
---interpret x = interpretStart x Map.empty
-interpret _  = error "Invalid Program"
+interpret :: Program -> String
+-- interpret x = interpretStart x Map.empty
+interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
     

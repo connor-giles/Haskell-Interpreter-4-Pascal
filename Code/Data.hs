@@ -70,7 +70,7 @@ data Statement =
     -- While loop
     | While BoolExp [Statement]
     -- For loop
-    | For String GenExp BoolExp [Statement]
+    | For String GenExp GenExp [Statement]
     -- Write
     | Write GenExp
     -- Continue statement
@@ -137,4 +137,4 @@ retrieveType mapName key = case Map.lookup key mapName of
 -- Hint: make a tuple containing the other ingredients
 
 -- tuple of global scope inner scopes and list of statements to interpret
-type Program = ([Definition], [Statement])
+type Program = [Statement]
