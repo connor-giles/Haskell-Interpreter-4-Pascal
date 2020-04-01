@@ -78,8 +78,9 @@ data Statement =
     -- Break statement
     | Break_S
 
-data VType = REAL | BOOL | STRING;
+data VType = REAL | BOOL | STRING
 
+--Might need to change back to VType who noes
 data Definition = 
     -- Variable definition, list of var, type
     VarDef [String] VType
@@ -119,21 +120,26 @@ toString (R val) = show(val)
 toString (S val) = show(val)
 
 -- puts new values into the map
-putVal :: Map.Map String (String, Value) -> String -> (String, Value) -> Map.Map String (String, Value)
-putVal mapName key (valType, val) = Map.insert key (valType, val) mapName
+putVal :: [Map.Map String (String, Value)] -> String -> (String, Value) -> (String, [Map.Map String (String, Value)] )
+putVal mapName key (valType, val) = 
+    let mapInsert = Map.insert key (valType, val) (head mapName) in  
+        ("", mapName)
 
 retrieveVal :: [Map.Map String (String, Value)] -> String -> Value
-retrieveVal mapName key = case Map.lookup key (head mapName) of
+retrieveVal mapName key = case (Map.lookup key (head mapName)) of
         Just (_, val) -> val
         Nothing -> retrieveVal (tail mapName) key
+retrieveVal [mapName] key = case (Map.lookup key mapName) of
+        Just (_, val) -> val 
+        Nothing -> error("Variable " ++ key ++ " is not in scope")
+        
 
-retrieveType :: Map.Map String (String, Value) -> String -> String
-retrieveType mapName key = case Map.lookup key mapName of
-        Nothing -> error "No valid type"
+
+
+retrieveType :: [Map.Map String (String, Value)] -> String -> String
+retrieveType mapName key = case (Map.lookup key (head mapName)) of
         Just (valType, _) -> valType 
-
--- updateVal :: Map.Map String (String, Value) -> String -> Value -> Map.Map String (String, Value)
--- updateVal mapName key val = Map.insert key val mapName 
+        Nothing -> retrieveType (tail mapName) key
 
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
