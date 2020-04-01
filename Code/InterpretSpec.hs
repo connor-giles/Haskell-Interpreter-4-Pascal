@@ -5,144 +5,154 @@ import Test.QuickCheck
 import Control.Exception (evaluate)
 import Interpret
 import Data 
+import qualified Data.Map.Strict as Map
 
 
 main :: IO ()
 main = hspec $ do
-  describe "uniOp1" $ do
-    context "-" $ do
-        it "Negates Floats Literally" $ do
-            uniOp1 "-" 2.0 `shouldBe` (-2.0)
-    context "sqrt" $ do
-        it "Performs sqrt Literally" $ do
-            uniOp1 "sqrt" 9.0 `shouldBe` 3.0
-    context "natlog" $ do
-        it "Performs natural log Literally" $ do
-            uniOp1 "ln" 2.718 `shouldBe` 0.999896315728952
-    context "sin" $ do
-        it "Performs sin Literally" $ do
-            uniOp1 "sin" 1.57079633 `shouldBe` 1.0
-    context "cos" $ do
-        it "Performs cos Literally" $ do
-            uniOp1 "cos" 3.14159265 `shouldBe` (-1.0)
-    context "exp" $ do
-        it "Performs exp Literally" $ do
-            uniOp1 "exp" 1.0 `shouldBe` 2.7182817
 
-
-  describe "biOp2" $ do
-    context "+" $ do
-        it "Adds Floats Literally" $ do
-            biOp2 "+" 2.0 3.0 `shouldBe` 5.0
-    context "-" $ do
-        it "Subtracts Floats Literally" $ do
-            biOp2 "-" 10.0 3.0 `shouldBe` 7.0
-    context "*" $ do 
-        it "Multiplies Floats Literally" $ do
-            biOp2 "*" 2.0 3.0 `shouldBe` 6.0
-    context "/" $ do
-        it "Divides Floats Literally" $ do
-            biOp2 "/" 10.0 5.0 `shouldBe` 2.0
-
-
+  -- UNIT TESTS FOR intExp  
   describe "intExp" $ do
-    context "Float Literal" $ do
-        it "5.0 Literal" $ do
-            intExp (Real 5.0) `shouldBe` 5.0
+    context "Literals" $ do
+        it "tests 5.0 as a literal" $ do
+            intExp (Real 5.0) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 5.0)
+        it "tests -5.0 as a literal" $ do
+            intExp (Real (-5.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-5.0))
     context "Negation" $ do
-        it "Negates Floats from AST" $ do
-            intExp (Op1 "-" (Real 2.0)) `shouldBe` (-2.0)
-    context "sqrt" $ do
-        it "Calculates sqrt from AST" $ do
-            intExp (Op1 "sqrt" (Real 9.0)) `shouldBe` 3.0
-    context "ln" $ do
-        it "Calculates ln from AST" $ do
-            intExp (Op1 "ln" (Real 2.718)) `shouldBe` 0.999896315728952
-    context "sin" $ do
-        it "Calculates sin from AST" $ do
-            intExp (Op1 "sin" (Real 1.57079633)) `shouldBe` 1.0
-    context "cos" $ do
-        it "Calculates cos from AST" $ do
-            intExp (Op1 "cos" (Real 3.14159265)) `shouldBe` -(1.0)
-    context "exp" $ do
-        it "Calculates exp from AST" $ do
-            intExp (Op1 "exp" (Real 1.0)) `shouldBe` 2.7182817
-    context "+" $ do
-        it "Adds Floats from AST" $ do
-            intExp (Op2 "+" (Real 2.0) (Real 3.0)) `shouldBe` 5.0
-    context "-" $ do
-        it "Subtracts Floats from AST" $ do
-            intExp (Op2 "-" (Real 10.0) (Real 3.0)) `shouldBe` 7.0
-    context "*" $ do
-        it "Multiplies Floats from AST" $ do
-            intExp (Op2 "*" (Real 2.0) (Real 3.0)) `shouldBe` 6.0
-    context "/" $ do
-        it "Divides Floats from AST" $ do
-            intExp (Op2 "/" (Real 10.0) (Real 5.0)) `shouldBe` 2.0
-
-  
-  describe "uniBoolOp1" $ do
-    context "Not" $ do
-        it "Negates True Literally" $ do
-            uniBoolOp1 "not" True `shouldBe` (False)
-        it "Negates False Literally" $ do
-            uniBoolOp1 "not" False `shouldBe` (True)   
-
-  describe "biBoolOp2" $ do
-    context "AND" $ do
-        it "Tests AND Literally" $ do
-            biBoolOp2 "and" True False  `shouldBe` (False)
-    context "OR" $ do
-        it "Tests OR Literally" $ do
-            biBoolOp2 "or" True False  `shouldBe` (True) 
-
-
-  describe "relationalOp2" $ do
-    context "=" $ do
-        it "Tests Equality Literally" $ do
-            relationalOp2 "=" 6.0 6.0  `shouldBe` (True)
-    context "<" $ do
-        it "Tests Less Than Literally" $ do
-            relationalOp2 "<" 5.0 6.0  `shouldBe` (True)
-    context ">" $ do
-        it "Tests Greater Than Literally" $ do
-            relationalOp2 ">" 5.0 6.0  `shouldBe` (False)  
-    context "<=" $ do
-        it "Tests Less Than or Equal Literally" $ do
-            relationalOp2 "<=" 10.0 10.0  `shouldBe` (True) 
-    context ">=" $ do
-        it "Tests Greater Than or Equal Literally" $ do
-            relationalOp2 ">=" 36.0 55.5  `shouldBe` (False) 
+        it "tests positives negated" $ do
+            intExp (Op1 "-" (Real 5.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-5.0)) 
+        it "tests negatives negated" $ do
+            intExp (Op1 "-" (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 5.0)
+    context "Square Root" $ do
+        it "tests square root of 9.0" $ do
+            intExp (Op1 "sqrt" (Real 9.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 3.0)
+    context "Natural Log" $ do
+        it "tests natural log of e" $ do
+            intExp (Op1 "ln" (Real 2.718)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 0.999896315728952)
+    context "Sine" $ do
+        it "tests sin of pi/2" $ do
+            intExp (Op1 "sin" (Real 1.57079633)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 1.0)
+    context "Cosine" $ do
+        it "tests cos of pi" $ do
+            intExp (Op1 "cos" (Real 3.14159265)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-1.0))
+    context "Exponential" $ do
+        it "tests exponetial of 1.0" $ do
+            intExp (Op1 "exp" (Real 1.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 2.7182817)
+    context "Addition" $ do
+        it "tests addition of two positives" $ do
+            intExp (Op2 "+" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 2.0)
+        it "tests addition of two negatives" $ do
+            intExp (Op2 "+" (Real (-5.0)) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-10.0))
+        it "tests addition of a positive and negative" $ do
+            intExp (Op2 "+" (Real 5.0) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 0.0)
+    context "Subtraction" $ do
+        it "tests subtraction of two positives" $ do
+            intExp (Op2 "-" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 0.0)
+        it "tests subtraction of two negatives" $ do
+            intExp (Op2 "-" (Real (-5.0)) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 0.0)
+        it "tests subtraction of a positive and negative" $ do
+            intExp (Op2 "-" (Real 5.0) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 10.0)
+    context "Mulitplication" $ do
+        it "tests mulitplication of two positives" $ do
+            intExp (Op2 "*" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 1.0)
+        it "tests mulitplication of two negatives" $ do
+            intExp (Op2 "*" (Real (-5.0)) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 25.0)
+        it "tests mulitplication of a positive and negative" $ do
+            intExp (Op2 "*" (Real 5.0) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-25.0))
+    context "Division" $ do
+        it "tests division of two positives" $ do
+            intExp (Op2 "/" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 1.0)
+        it "tests division of two negatives" $ do
+            intExp (Op2 "/" (Real (-5.0)) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 1.0)
+        it "tests division of a positive and negative" $ do
+            intExp (Op2 "/" (Real 5.0) (Real (-5.0))) ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R (-1.0))
+    context "Variable Interpretation" $ do
+        it "tests interpretation of a variable's value" $ do
+            intExp (Var "test1") ([Map.fromList [("test1", ("Real", R 1.0))]]) `shouldBe` (R 1.0)
 
 
+
+  -- UNIT TESTS FOR intBoolExp
   describe "intBoolExp" $ do
-    context "=" $ do
-        it "Tests Equality from AST" $ do
-            intBoolExp (Comp "=" (Real 3.0) (Real 3.0)) `shouldBe` True
-    context "<" $ do
-        it "Tests Less Than from AST" $ do
-            intBoolExp (Comp "<" (Real 2.0) (Real 3.0)) `shouldBe` True
-    context ">" $ do
-        it "Tests Greater Than from AST" $ do
-            intBoolExp (Comp ">" (Real 2.0) (Real 3.0)) `shouldBe` False
-    context "<=" $ do
-        it "Tests Less Than or Equal from AST" $ do
-            intBoolExp (Comp "<=" (Real 3.0) (Real 3.0)) `shouldBe` True
-    context ">=" $ do
-        it "Tests Greater Than or Equal from AST" $ do
-            intBoolExp (Comp ">=" (Real 2.0) (Real 3.0)) `shouldBe` False
+    context "Literals" $ do
+        it "tests True as a literal" $ do
+            intBoolExp (True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests False as a literal" $ do
+            intBoolExp (False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
     context "Not" $ do
-        it "Tests Not" $ do
-            intBoolExp (Not (Comp "<" (Real 2.0 ) (Real 3.0))) `shouldBe` False
-            intBoolExp (Not True_C) `shouldBe` False
-            intBoolExp (Not False_C) `shouldBe` True
-    context "AND" $ do
-        it "Tests AND" $ do
-            intBoolExp (OpB "and" True_C False_C) `shouldBe` False
-            intBoolExp (OpB "and" True_C True_C) `shouldBe` True
-    context "OR" $ do
-        it "Tests OR" $ do
-            intBoolExp (OpB "or" True_C False_C) `shouldBe` True
-            intBoolExp (OpB "or" False_C False_C) `shouldBe` False
-            
+        it "tests negation of True" $ do
+            intBoolExp (Not True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests negation of False" $ do
+            intBoolExp (Not False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+    context "And" $ do
+        it "tests and on True and False" $ do
+            intBoolExp (OpB "and" True_C False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests and on False and False" $ do
+            intBoolExp (OpB "and" False_C False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests and on True and True" $ do
+            intBoolExp (OpB "and" True_C True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+    context "Or" $ do
+        it "tests or on True or False" $ do
+            intBoolExp (OpB "or" True_C False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests or on False or False" $ do
+            intBoolExp (OpB "or" False_C False_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests or on True or True" $ do
+            intBoolExp (OpB "or" True_C True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+    context "Less Than" $ do
+        it "tests less than on a larger float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 10.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests less than on a smaller float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 0.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests less than on same float value" $ do
+            intBoolExp (Comp "<" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+    context "Less Than Equal" $ do
+        it "tests less than equal on a larger float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 10.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests less than equal on a smaller float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 0.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests less than equal on same float value" $ do
+            intBoolExp (Comp "<=" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+    context "Greater Than" $ do
+        it "tests greater than on a larger float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 10.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests greater than on a smaller float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 0.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests greater than on same float value" $ do
+            intBoolExp (Comp ">" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+    context "Greater Than Equal" $ do
+        it "tests greater than equal on a larger float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 10.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B False)
+        it "tests greater than equal on a smaller float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 0.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+        it "tests greater than equal on same float value" $ do
+            intBoolExp (Comp ">=" (Real 1.0) (Real 1.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+    context "Variable Interpretation" $ do
+        it "tests interpretation of a variable's value" $ do
+            intBoolExp (Var_B "test1") ([Map.fromList [("test1", ("Boolean", B False))]]) `shouldBe` (B False)
+            intBoolExp (Var_B "test1") ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
 
+  -- UNIT TESTS FOR intGenExp
+  describe "intGenExpVal" $ do
+    context "Float Expressions" $ do
+        it "tests float expresssions" $ do
+            intGenExpVal (FloatExp (Real 5.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (R 5.0)
+        it "tests boolean expresssions" $ do
+            intGenExpVal (BExp True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+
+--   -- UNIT TESTS FOR intStatement
+--   describe "intStatement" $ do
+--     context "Float Expressions" $ do
+--         it "tests assignment of float" $ do
+--             intStatement (Assign "test2" (FloatExp (Real 10.0))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("test2 is assigned a value", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Real", R 10.0))]])
+--     context "Boolean Expressions" $ do
+--         it "tests assignment of booleans" $ do
+--             intStatement (Assign "test2" (BExp (True_C))) ([Map.fromList [("test1", ("Real", R 5.0))]]) ("test2 is assigned a value", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Boolean", B True))]])
+
+
+--   describe "intWriteln" $ do
+--     context "Float Expressions" $ do
+--         it "tests writeln of float" $ do
+--             intWriteln (Write (FloatExp(Real 10.0))) (Map.fromList [("test1", ("Real", R 5.0))]) `shouldBe` "10.0"
+--     context "Boolean Expressions" $ do
+--         it "tests writeln of boolean" $ do
+--             intWriteln (Write (BExp(True_C))) (Map.fromList [("test1", ("Real", R 5.0))]) `shouldBe` "True"

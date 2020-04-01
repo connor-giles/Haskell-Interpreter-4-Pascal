@@ -38,12 +38,12 @@ import Lexer
         'true'          { Token _ (TokenK "true")    }
         'false'         { Token _ (TokenK "false")   }
         'sqrt'          { Token _ (TokenK "sqrt")    } 
-        'ln'            { Token _ (TokenK "log")      }
+        'ln'            { Token _ (TokenK "ln")      }
         'sin'           { Token _ (TokenK "sin")     }
         'exp'           { Token _ (TokenK "exp")     }
         'cos'           { Token _ (TokenK "false")   }
         'and'           { Token _ (TokenK "and")     }
-        'or'            { Token _ (TokenK "or")       }
+        'or'            { Token _ (TokenK "or")      }
         'not'           { Token _ (TokenK "not")     }
         'for'           { Token _ (TokenK "for")     }
         'to'            { Token _ (TokenK "to")      }
@@ -61,6 +61,9 @@ import Lexer
         'writeln'       { Token _ (TokenK "writeln") }
         'if'            { Token _ (TokenK "if")      }
         'then'          { Token _ (TokenK "then")    }
+        'else'          { Token _ (TokenK "else")    }
+        'Continue'      { Token _ (TokenK "Continue")}
+        'Break'         { Token _ (TokenK "Break")   }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -71,7 +74,7 @@ import Lexer
 
 -- Entry point
 Program :: {Program}
-    : Defs 'begin' Statements 'end' { $3 }
+    : Defs 'begin' Statements 'end' { ($1, $3) }
 
 Defs :: {[Definition]}
     : { [] } -- nothing; make empty list
@@ -129,11 +132,13 @@ GenExp :: {GenExp}
 
 --More stuff needs to go here
 Statement :: {Statement}
-    : ID ':=' GenExp { Assign $1 $3 }
-    | 'if' '(' BoolExp ')'  'then' 'begin' Statements  'end' {If $3 $7}
-    | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
-    | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
+    : ID ':=' GenExp ';' { Assign $1 $3 }
+    | 'if' '(' BoolExp ')' 'then' Statements 'else' Statements  {If $3 $6 $8}
+    | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' ';' {While $3 $7}
+    | 'for' ID ':=' GenExp 'to' GenExp 'do' 'begin' Statements 'end' ';' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' {Write $3}
+    | 'Continue' ';' {Continue_S}
+    | 'Break' ';' {Break_S}
     
 
 {}

@@ -36,20 +36,20 @@ $alpha = [a-zA-Z]               -- alphabetic characters
 
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
-  $white+                               ; -- remove multiple white-spaces
-  "program" .*                          ;
-  "//" .*                               ; -- skips single line comments
-  "(*" .*                               ; -- skips multi line comments
-  .* "*)"                               ; -- skips multi line comments
-  $digit+\.$digit*                      { tok_read     TokenFloat }
-  [\+]|[\-]|[\*]|[\/]|[=]|:=            { tok_string     TokenOp  }
-  [\<]|[\>]|\<=|\>=                     { tok_string     TokenOp  }
-  [\(]|[\)]|begin|end|true|false        { tok_string     TokenK   }
-  [\:]|and|not|var|bool|real|string     { tok_string     TokenK   }
-  while|do|for|to|writeln               { tok_string     TokenK   }
-  [\,]|ID_List|program                  { tok_string     TokenK   }
-  sqrt|ln|sin|cos                       { tok_string     TokenK   }
-  $alpha [$alpha $digit \_ \']*         { tok_string     TokenID  }
+  $white+                                   ; -- remove multiple white-spaces
+  "program" .*                              ;
+  "//" .*                                   ; -- skips single line comments
+  "(*" .*                                   ; -- skips multi line comments
+  .* "*)"                                   ; -- skips multi line comments
+  $digit+\.$digit*                          { tok_read     TokenFloat }
+  [\+]|[\-]|[\*]|[\/]|[=]|:=                { tok_string     TokenOp  }
+  [\<]|[\>]|\<=|\>=                         { tok_string     TokenOp  }
+  [\(]|[\)]|begin|end|true|false            { tok_string     TokenK   }
+  [\:]|[\;]|and|not|var|bool|real|string    { tok_string     TokenK   }
+  while|do|for|to|writeln|if|else           { tok_string     TokenK   }
+  [\,]|ID_List|program|then|or              { tok_string     TokenK   }
+  sqrt|ln|sin|cos|Continue|Break            { tok_string     TokenK   }
+  $alpha [$alpha $digit \_ \']*             { tok_string     TokenID  }
 {
 
 -- Some action helpers:
