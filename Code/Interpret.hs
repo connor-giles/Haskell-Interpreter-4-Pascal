@@ -37,7 +37,7 @@ intExp (Op2 "-" e1 e2) m = (R (toFloat(intExp e1 m) - toFloat(intExp e2 m) ))
 intExp (Op2 "*" e1 e2) m = (R (toFloat(intExp e1 m) * toFloat(intExp e2 m) ))
 intExp (Op2 "/" _ (Real 0.0)) _ = error "Cannot divide by zero"
 intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
-intExp _ _ = error "Not Valid intExp"
+intExp _ _ = error "Invalid intExp"
 
 intBoolExp :: BoolExp -> Map.Map String Value -> Value
 intBoolExp (True_C) _ = (B True)
@@ -50,7 +50,7 @@ intBoolExp (Comp ">" e1 e2) m = (B ((toFloat(intExp e1 m)) > (toFloat(intExp e2 
 intBoolExp (Comp ">=" e1 e2) m = (B ((toFloat(intExp e1 m)) >= (toFloat(intExp e2 m))))
 intBoolExp (Comp "<" e1 e2) m = (B ((toFloat(intExp e1 m)) < (toFloat(intExp e2 m))))
 intBoolExp (Comp "<=" e1 e2) m = (B ((toFloat(intExp e1 m)) <= (toFloat(intExp e2 m))))
-intBoolExp _ _ = error "Not Valid intBoolExp"
+intBoolExp _ _ = error "Invalid intBoolExp"
 
 intGenExp :: GenExp -> Map.Map String Value -> Value
 intGenExp (FloatExp e1) m = (intExp e1 m)
@@ -58,14 +58,19 @@ intGenExp (BExp e1) m = (intBoolExp e1 m)
 
 intStatement :: Statement -> Map.Map String Value -> Map.Map String Value
 intStatement (Assign varName value) m = (putVal m varName (intGenExp value m))
+-- intStatement (Block innerCode) m = interpret innerCode
+-- intStatement (If conditional code) m = do
+--     if(toBool(intBoolExp(conditional m)))
+--         then interpret 
 
 intWriteln:: Statement -> Map.Map String Value -> String
 intWriteln (Write value) m = toString(intGenExp value m)
+intWriteln _ _ = error "Invalid Writeln"
 
 
 interpret :: Program -> String
--- TODO: write the interpreter
-interpret [] = ""
+interpret [x] = ""
+interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
     

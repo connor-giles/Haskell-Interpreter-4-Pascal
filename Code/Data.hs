@@ -64,7 +64,7 @@ data Statement =
     -- Variable assignment
      Assign String GenExp
     -- If statement
-    | If BoolExp [Statement]
+    | If BoolExp [Statement] [Statement]
     -- Block
     | Block [Statement]
     -- While loop
