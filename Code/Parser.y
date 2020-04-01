@@ -62,6 +62,8 @@ import Lexer
         'if'            { Token _ (TokenK "if")      }
         'then'          { Token _ (TokenK "then")    }
         'else'          { Token _ (TokenK "else")    }
+        'Continue'      { Token _ (TokenK "Continue")}
+        'Break'         { Token _ (TokenK "Break")   }
 
 -- associativity of operators in reverse precedence order
 %nonassoc '>' '>=' '<' '<=' '==' '!='
@@ -135,6 +137,8 @@ Statement :: {Statement}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' {While $3 $7}
     | 'for' ID ':=' GenExp 'to' BoolExp 'do' 'begin' Statements 'end' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' {Write $3}
+    | 'Continue' {Continue_S}
+    | 'Break' {Break_S}
     
 
 {}

@@ -14,7 +14,7 @@ module Data
         toBool,
         toString,
         putVal,
-        updateVal,
+        retrieveType,
         retrieveVal,
         Program
         
@@ -73,6 +73,10 @@ data Statement =
     | For String GenExp BoolExp [Statement]
     -- Write
     | Write GenExp
+    -- Continue statement
+    | Continue_S
+    -- Break statement
+    | Break_S
 
 data VType = REAL | BOOL | STRING;
 
@@ -95,14 +99,14 @@ data Value =
 -- converts Values to Floats
 toFloat :: Value -> Float
 toFloat (R val) = val
-toFloat (B val) = error "value not convertible to float"
-toFloat (S val) = error "value not convertible to float"
+toFloat (B _) = error "value not convertible to float"
+toFloat (S _) = error "value not convertible to float"
 
 -- converts Values to Booleans
 toBool :: Value -> Bool
 toBool (B val) = val
-toBool (R val) = error "value not convertible to boolean"
-toBool (S val) = error "value not convertible to boolean"
+toBool (R _) = error "value not convertible to boolean"
+toBool (S _) = error "value not convertible to boolean"
 
 toString ::  Value -> String
 toString (B val) = show(val)
@@ -110,16 +114,21 @@ toString (R val) = show(val)
 toString (S val) = show(val)
 
 -- puts new values into the map
-putVal :: Map.Map String Value -> String -> Value -> Map.Map String Value
-putVal mapName key val = Map.insert key val mapName
+putVal :: Map.Map String (String, Value) -> String -> (String, Value) -> Map.Map String (String, Value)
+putVal mapName key (valType, val) = Map.insert key (valType, val) mapName
 
-retrieveVal :: Map.Map String Value -> String -> Value
+retrieveVal :: Map.Map String (String, Value) -> String -> Value
 retrieveVal mapName key = case Map.lookup key mapName of
         Nothing -> error "Key did not have associated value"
-        Just val -> val
+        Just (_, val) -> val
 
-updateVal :: Map.Map String Value -> String -> Value -> Map.Map String Value
-updateVal mapName key val = Map.insert key val mapName 
+retrieveType :: Map.Map String (String, Value) -> String -> String
+retrieveType mapName key = case Map.lookup key mapName of
+        Nothing -> error "No valid type"
+        Just (valType, _) -> valType
+
+-- updateVal :: Map.Map String (String, Value) -> String -> Value -> Map.Map String (String, Value)
+-- updateVal mapName key val = Map.insert key val mapName 
 
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff

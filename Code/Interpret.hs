@@ -3,7 +3,8 @@ module Interpret
     interpret,
     intExp,
     intBoolExp,
-    intGenExp,
+    intGenExpVal,
+    intGenExpType,
     intStatement,
     intWriteln
 )
@@ -23,7 +24,7 @@ import qualified Data.Map.Strict as Map
 
 -- Pascal: Prelude.head: empty list likely means the variable name is wrong in test file
 
-intExp :: Exp -> Map.Map String Value -> Value
+intExp :: Exp -> Map.Map String (String, Value) -> Value
 intExp (Real e1) _ = (R e1)
 intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
@@ -39,7 +40,7 @@ intExp (Op2 "/" _ (Real 0.0)) _ = error "Cannot divide by zero"
 intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
 intExp _ _ = error "Invalid intExp"
 
-intBoolExp :: BoolExp -> Map.Map String Value -> Value
+intBoolExp :: BoolExp -> Map.Map String (String, Value) -> Value
 intBoolExp (True_C) _ = (B True)
 intBoolExp (False_C) _ = (B False)
 intBoolExp (Var_B v1) m = (retrieveVal m v1)
@@ -52,24 +53,33 @@ intBoolExp (Comp "<" e1 e2) m = (B ((toFloat(intExp e1 m)) < (toFloat(intExp e2 
 intBoolExp (Comp "<=" e1 e2) m = (B ((toFloat(intExp e1 m)) <= (toFloat(intExp e2 m))))
 intBoolExp _ _ = error "Invalid intBoolExp"
 
-intGenExp :: GenExp -> Map.Map String Value -> Value
-intGenExp (FloatExp e1) m = (intExp e1 m)
-intGenExp (BExp e1) m = (intBoolExp e1 m)
+intGenExpVal :: GenExp -> Map.Map String (String, Value) -> Value
+intGenExpVal (FloatExp e1) m = (intExp e1 m)
+intGenExpVal (BExp e1) m = (intBoolExp e1 m)
 
-intStatement :: Statement -> Map.Map String Value -> Map.Map String Value
-intStatement (Assign varName value) m = (putVal m varName (intGenExp value m))
+intGenExpType :: GenExp -> Map.Map String (String, Value) -> String
+intGenExpType (FloatExp _) _ = "Real"
+intGenExpType (BExp _) _ = "Boolean"
+
+intStatement :: Statement -> Map.Map String (String, Value) -> Map.Map String (String, Value)
+intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 -- intStatement (Block innerCode) m = interpret innerCode
 -- intStatement (If conditional code) m = do
 --     if(toBool(intBoolExp(conditional m)))
 --         then interpret 
 
-intWriteln:: Statement -> Map.Map String Value -> String
-intWriteln (Write value) m = toString(intGenExp value m)
+intWriteln:: Statement -> Map.Map String (String, Value) -> String
+intWriteln (Write value) m = toString(intGenExpVal value m)
 intWriteln _ _ = error "Invalid Writeln"
 
 
+-- interpretStart :: [Statement] -> Map.Map String Value -> String
+-- interpretStart (x:xs) m = let current = intStatement x m in
+--     (fst current) ++ (interpretStart xs (snd current))
+
+
 interpret :: Program -> String
-interpret [x] = ""
+-- interpret x = interpretStart x Map.empty
 interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
