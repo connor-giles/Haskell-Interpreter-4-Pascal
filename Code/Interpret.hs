@@ -80,7 +80,6 @@ interpret _ = error "Invalid Program"
 
 
 -- =======TODO=======
--- Either parse the program name and print what program is running or just ignore it like you are currently doing
 -- Get variable declarations/definitions working
 -- Get Boolean/Logical Expressions to work
 -- Get Decision Making to work

@@ -133,4 +133,4 @@ retrieveType mapName key = case Map.lookup key mapName of
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = [Statement]
+type Program = ([Definition], [Statement])
