@@ -65,7 +65,7 @@ intStart(_,x:xs) map = let curr = intStatement x map in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
-intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
 
 -- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
@@ -85,7 +85,7 @@ intWriteln _ _ = error "Invalid Writeln"
 
 interpret :: Program -> String
 interpret ([],[]) = "";
---interpret x = fst(intStart (snd x) [Map.empty])
+interpret x = intStart x [Map.empty]
 interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
