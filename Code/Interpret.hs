@@ -61,6 +61,9 @@ intGenExpType :: GenExp -> Map.Map String (String, Value) -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean"
 
+-- intVarDef :: [String] -> VType -> Map.Map String (String, Value) -- creates global scope
+-- intVarDef list v = $ \list -> do 
+
 intStatement :: Statement -> Map.Map String (String, Value) -> Map.Map String (String, Value)
 intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 -- intStatement (Block innerCode) m = interpret innerCode
@@ -78,9 +81,9 @@ intWriteln _ _ = error "Invalid Writeln"
 --     (fst current) ++ (interpretStart xs (snd current))
 
 
-interpret :: Program -> String
--- interpret x = interpretStart x Map.empty
-interpret _ = error "Invalid Program"
+interpret :: (Program, Map.Map String (String, Value)) -> String
+--interpret x = interpretStart x Map.empty
+interpret _  = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
     
@@ -96,4 +99,3 @@ interpret _ = error "Invalid Program"
 -- Get break and continue keywords to work
 -- Get user defined procedures and functions to work
 -- Implement Scoping
-    

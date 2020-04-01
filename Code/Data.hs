@@ -85,6 +85,8 @@ data Definition =
     VarDef [String] VType
     -- Procedures
     | Proc String [(String, VType)] Statement
+    -- list of var names
+    | Id_List [String]
 
 -- this is a wrapper like object that contains everything our map will need
 data Value = 
@@ -133,4 +135,6 @@ retrieveType mapName key = case Map.lookup key mapName of
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = [Statement]
+
+-- tuple of global scope inner scopes and list of statements to interpret
+type Program = ([Definition], [Statement])
