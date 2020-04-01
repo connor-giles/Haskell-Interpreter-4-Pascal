@@ -70,7 +70,7 @@ data Statement =
     -- While loop
     | While BoolExp [Statement]
     -- For loop
-    | For String GenExp BoolExp [Statement]
+    | For String GenExp GenExp [Statement]
     -- Write
     | Write GenExp
     -- Continue statement
