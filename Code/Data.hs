@@ -98,6 +98,9 @@ data Value =
     | S String
     deriving (Show, Eq)
 
+data State =
+    Curr String [Map.Map String (String, Value)]
+
 -- converts Values to Floats
 toFloat :: Value -> Float
 toFloat (R val) = val
@@ -119,15 +122,15 @@ toString (S val) = show(val)
 putVal :: Map.Map String (String, Value) -> String -> (String, Value) -> Map.Map String (String, Value)
 putVal mapName key (valType, val) = Map.insert key (valType, val) mapName
 
-retrieveVal :: Map.Map String (String, Value) -> String -> Value
-retrieveVal mapName key = case Map.lookup key mapName of
-        Nothing -> error "Key did not have associated value"
+retrieveVal :: [Map.Map String (String, Value)] -> String -> Value
+retrieveVal mapName key = case Map.lookup key (head mapName) of
         Just (_, val) -> val
+        Nothing -> retrieveVal (tail mapName) key
 
 retrieveType :: Map.Map String (String, Value) -> String -> String
 retrieveType mapName key = case Map.lookup key mapName of
         Nothing -> error "No valid type"
-        Just (valType, _) -> valType
+        Just (valType, _) -> valType 
 
 -- updateVal :: Map.Map String (String, Value) -> String -> Value -> Map.Map String (String, Value)
 -- updateVal mapName key val = Map.insert key val mapName 
@@ -135,6 +138,4 @@ retrieveType mapName key = case Map.lookup key mapName of
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-
--- tuple of global scope inner scopes and list of statements to interpret
-type Program = [Statement]
+type Program = ([Definition], [Statement])

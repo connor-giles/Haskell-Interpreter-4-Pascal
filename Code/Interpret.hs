@@ -22,7 +22,7 @@ import qualified Data.Map.Strict as Map
 
 -- Pascal: Prelude.head: empty list likely means the variable name is wrong in test file
 
-intExp :: Exp -> Map.Map String (String, Value) -> Value
+intExp :: Exp -> [Map.Map String (String, Value)] -> Value
 intExp (Real e1) _ = (R e1)
 intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
@@ -38,7 +38,7 @@ intExp (Op2 "/" _ (Real 0.0)) _ = error "Cannot divide by zero"
 intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
 intExp _ _ = error "Invalid intExp"
 
-intBoolExp :: BoolExp -> Map.Map String (String, Value) -> Value
+intBoolExp :: BoolExp -> [Map.Map String (String, Value)] -> Value
 intBoolExp (True_C) _ = (B True)
 intBoolExp (False_C) _ = (B False)
 intBoolExp (Var_B v1) m = (retrieveVal m v1)
@@ -51,13 +51,20 @@ intBoolExp (Comp "<" e1 e2) m = (B ((toFloat(intExp e1 m)) < (toFloat(intExp e2 
 intBoolExp (Comp "<=" e1 e2) m = (B ((toFloat(intExp e1 m)) <= (toFloat(intExp e2 m))))
 intBoolExp _ _ = error "Invalid intBoolExp"
 
-intGenExpVal :: GenExp -> Map.Map String (String, Value) -> Value
+intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
 
-intGenExpType :: GenExp -> Map.Map String (String, Value) -> String
+intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
+
+intStart :: [Statement] -> [Map.Map String (String, Value)] -> (String, Map.Map String (String, Value))
+intStart [] map = ("" , Map.empty)
+intStart(x:xs) map = let curr = intStatement x map 
+                         next = intStart xs (snd curr) in
+                                   (fst curr) ++ (intStart xs $ snd curr)
+
 
 -- intVarDef :: [String] -> VType -> Map.Map String (String, Value) -- creates global scope
 -- intVarDef list v = $ \list -> do 
@@ -75,7 +82,8 @@ intWriteln _ _ = error "Invalid Writeln"
 
 
 interpret :: Program -> String
--- interpret x = interpretStart x Map.empty
+interpret ([],[]) = "";
+interpret x = fst(intStart (snd x) [Map.empty])
 interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
@@ -83,7 +91,6 @@ interpret _ = error "Invalid Program"
 
 
 -- =======TODO=======
--- Either parse the program name and print what program is running or just ignore it like you are currently doing
 -- Get variable declarations/definitions working
 -- Get Boolean/Logical Expressions to work
 -- Get Decision Making to work
