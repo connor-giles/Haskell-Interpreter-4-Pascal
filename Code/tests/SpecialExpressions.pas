@@ -1,6 +1,9 @@
 program SimpleExpressions;
 
-var test1, test2, test3 : real;
+var 
+ test1 : real;
+ test2 : real;
+ test3 : real;
 
 begin
     cosTest := cos(3.14159265);

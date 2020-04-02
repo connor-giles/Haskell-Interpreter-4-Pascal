@@ -1,6 +1,6 @@
 program SimplePrint;
 
-var test1, test2, test3 : real;
+var test1 : real;
 
 begin
     writeln(20.0 < 15.0); //false

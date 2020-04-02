@@ -1,6 +1,9 @@
 program SimplePrint;
 
-var test1, test2, test3 : real;
+var 
+test1 : real;
+test2 : real;
+test3 : real;
 
 begin
     writeln(true); //can print booleans
