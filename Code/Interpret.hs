@@ -5,7 +5,7 @@ module Interpret
     intBoolExp,
     intGenExpVal,
     intGenExpType,
-    --intStatement,
+    intStatement,
     intWriteln
 )
 where
@@ -59,6 +59,7 @@ intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
 
+
 intStart :: Program -> [Map.Map String (String, Value)] -> String
 intStart ([],[]) map = ""
 intStart(_,x:xs) map = let curr = intStatement x map in
@@ -70,6 +71,7 @@ intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putV
 
 -- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
 -- intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+
 -- intStatement (Block innerCode) m = interpret innerCode
 -- intStatement (If conditional code) m = do
 --     if(toBool(intBoolExp(conditional m)))
@@ -80,7 +82,7 @@ intWriteln (Write value) m = toString(intGenExpVal value m)
 intWriteln _ _ = error "Invalid Writeln"
 
 -- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)
--- intDefinitions (VarDef varNames varType, _ ) m = 
+-- intDefinitions (x, y) m = 
 
 
 interpret :: Program -> String

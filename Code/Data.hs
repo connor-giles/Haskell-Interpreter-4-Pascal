@@ -120,15 +120,21 @@ toString (R val) = show(val)
 toString (S val) = show(val)
 
 -- puts new values into the map
+
 putVal :: [Map.Map String (String, Value)] -> String -> (String, Value) -> ([Map.Map String (String, Value)] )
 putVal mapName key (valType, val) = [Map.insert key (valType, val) (head mapName)]
     -- let mapInsert = Map.insert key (valType, val) (head mapName) in  
     --     ("", mapName)
 
+
 retrieveVal :: [Map.Map String (String, Value)] -> String -> Value
+retrieveVal [mapName] key = case (Map.lookup key mapName) of
+        Just (_, val) -> val
+        Nothing -> error("Variable " ++ key ++ " is not in scope") 
 retrieveVal mapName key = case (Map.lookup key (head mapName)) of
         Just (_, val) -> val
         Nothing -> retrieveVal (tail mapName) key
+
 retrieveVal [mapName] key = case (Map.lookup key mapName) of
         Just (_, val) -> val 
         Nothing -> error("Variable " ++ key ++ " is not in scope")
