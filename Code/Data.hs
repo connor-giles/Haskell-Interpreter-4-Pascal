@@ -56,6 +56,8 @@ data GenExp =
     FloatExp Exp 
     -- boolean expressions
     | BExp BoolExp
+    -- variables
+    | VarExp String
     deriving (Show, Eq)
 
 -- Data-structure for statements
@@ -73,6 +75,8 @@ data Statement =
     | For String GenExp GenExp [Statement]
     -- Write
     | Write GenExp
+    -- Write String Literals
+    | WriteLiteral String
     -- Continue statement
     | Continue_S
     -- Break statement
@@ -123,8 +127,6 @@ toString (S val) = show(val)
 
 putVal :: [Map.Map String (String, Value)] -> String -> (String, Value) -> ([Map.Map String (String, Value)] )
 putVal mapName key (valType, val) = [Map.insert key (valType, val) (head mapName)]
-    -- let mapInsert = Map.insert key (valType, val) (head mapName) in  
-    --     ("", mapName)
 
 
 retrieveVal :: [Map.Map String (String, Value)] -> String -> Value
@@ -134,15 +136,11 @@ retrieveVal [mapName] key = case (Map.lookup key mapName) of
 retrieveVal mapName key = case (Map.lookup key (head mapName)) of
         Just (_, val) -> val
         Nothing -> retrieveVal (tail mapName) key
-
-retrieveVal [mapName] key = case (Map.lookup key mapName) of
-        Just (_, val) -> val 
-        Nothing -> error("Variable " ++ key ++ " is not in scope")
         
-
-
-
 retrieveType :: [Map.Map String (String, Value)] -> String -> String
+retrieveType [mapName] key = case (Map.lookup key mapName) of
+        Just (valType, _) -> valType 
+        Nothing -> error("Variable " ++ key ++ " is not in scope") 
 retrieveType mapName key = case (Map.lookup key (head mapName)) of
         Just (valType, _) -> valType 
         Nothing -> retrieveType (tail mapName) key

@@ -5,8 +5,7 @@ module Interpret
     intBoolExp,
     intGenExpVal,
     intGenExpType,
-    intStatement,
-    intWriteln
+    intStatement
 )
 where
 
@@ -54,6 +53,7 @@ intBoolExp _ _ = error "Invalid intBoolExp"
 intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
+intGenExpVal (VarExp varName) m = (retrieveVal m varName)
 
 intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
@@ -61,25 +61,18 @@ intGenExpType (BExp _) _ = "Boolean"
 
 
 intStart :: Program -> [Map.Map String (String, Value)] -> String
-intStart ([],[]) map = ""
-intStart(_,x:xs) map = let curr = intStatement x map in
+intStart ([],[]) mapName = ""
+intStart(_,x:xs) mapName = let curr = intStatement x mapName in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
-intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+intStatement (Assign varName value) m = (varName ++ " is assigned a value\n", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
+intStatement (WriteLiteral value) m = (value ++ "\n", m)
 
-
--- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
--- intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
-
--- intStatement (Block innerCode) m = interpret innerCode
--- intStatement (If conditional code) m = do
---     if(toBool(intBoolExp(conditional m)))
---         then interpret 
-
-intWriteln :: Statement -> [Map.Map String (String, Value)] -> String
-intWriteln (Write value) m = toString(intGenExpVal value m)
-intWriteln _ _ = error "Invalid Writeln"
+-- intWriteln :: Statement -> [Map.Map String (String, Value)] -> String
+-- intStatement (Write value) m = toString(intGenExpVal value m)
+-- intWriteln _ _ = error "Invalid Writeln"
 
 -- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)
 -- intDefinitions (x, y) m = 
@@ -88,8 +81,6 @@ intWriteln _ _ = error "Invalid Writeln"
 interpret :: Program -> String
 interpret ([],[]) = "";
 interpret x = intStart x [Map.empty]
-interpret _ = error "Invalid Program"
---interpret program = interpretStart program [Map.empty]
 
     
 
@@ -98,7 +89,6 @@ interpret _ = error "Invalid Program"
 -- Get variable declarations/definitions working
 -- Get Boolean/Logical Expressions to work
 -- Get Decision Making to work
--- Get special expressions to evauluate
 -- Get while-do and for-do loops to work
 -- Get break and continue keywords to work
 -- Get user defined procedures and functions to work

@@ -21,6 +21,7 @@ import Lexer
         int             { Token _ (TokenInt $$)      }
         float           { Token _ (TokenFloat $$)    }
         ID              { Token _ (TokenID $$)       }
+        Lit             { Token _ (TokenLit $$)      }
         '<'             { Token _ (TokenOp "<")      }
         '>'             { Token _ (TokenOp ">")      }
         '<='            { Token _ (TokenOp "<=")     }
@@ -41,7 +42,7 @@ import Lexer
         'ln'            { Token _ (TokenK "ln")      }
         'sin'           { Token _ (TokenK "sin")     }
         'exp'           { Token _ (TokenK "exp")     }
-        'cos'           { Token _ (TokenK "false")   }
+        'cos'           { Token _ (TokenK "cos")     }
         'and'           { Token _ (TokenK "and")     }
         'or'            { Token _ (TokenK "or")      }
         'not'           { Token _ (TokenK "not")     }
@@ -56,6 +57,7 @@ import Lexer
         'string'        { Token _ (TokenK "string")  }
         ','             { Token _ (TokenK ",")       }
         ';'             { Token _ (TokenK ";")       }
+        '"'             { Token _ (TokenK "\"")       }
         'ID_List'       { Token _ (TokenK "ID_List") }
         'program'       { Token _ (TokenK "program") }
         'writeln'       { Token _ (TokenK "writeln") }
@@ -95,7 +97,8 @@ ID_List :: {[String]}
 
 -- Expressions
 Exp :: {Exp}
-    : '+' Exp { $2 } -- ignore Plus
+    : '(' Exp ')' { $2 } -- ignore brackets
+    | '+' Exp { $2 } -- ignore Plus
     | '-' Exp { Op1 "-" $2}
     | 'sqrt' Exp  { Op1 "sqrt" $2 }
     | 'ln' Exp  { Op1 "ln" $2 }
@@ -106,7 +109,6 @@ Exp :: {Exp}
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | Exp '/' Exp { Op2 "/" $1 $3 }
     | Exp '-' Exp { Op2 "-" $1 $3 }
-    | '(' Exp ')' { $2 } -- ignore brackets
     | ID { Var $1 }
     | float {Real $1}
 
@@ -129,6 +131,7 @@ Statements :: {[Statement]}
 GenExp :: {GenExp}
     : Exp { FloatExp $1 }
     | BoolExp { BExp $1 }
+    | ID { VarExp $1 }
 
 --More stuff needs to go here
 Statement :: {Statement}
@@ -136,7 +139,8 @@ Statement :: {Statement}
     | 'if' '(' BoolExp ')' 'then' Statements 'else' Statements  {If $3 $6 $8}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' ';' {While $3 $7}
     | 'for' ID ':=' GenExp 'to' GenExp 'do' 'begin' Statements 'end' ';' {For $2 $4 $6 $9 } 
-    | 'writeln' '(' GenExp ')' {Write $3}
+    | 'writeln' '(' GenExp ')' ';' {Write $3}
+    | 'writeln' '(' Lit ')' ';' {WriteLiteral $3}
     | 'Continue' ';' {Continue_S}
     | 'Break' ';' {Break_S}
     
