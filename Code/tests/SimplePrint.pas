@@ -20,16 +20,25 @@ begin
             writeln(test1); 
         end
 
+    while(test) do
+    begin 
+
+        test2 := 100.0;
+        test := false;
+
+        if(test) then
+        begin
+            test2 := 100.0;
+            test := false;
+        end
+        else
+        begin 
+            test := false;
+        end
+    end;
+        
 
     writeln(test);
     writeln(test2);
-
-
-    writeln(20.0 < 15.0); //false
-    writeln(20.0 <= 15.0); //fales
-    writeln(20.0 > 15.0); //true
-    writeln(20.0 >= 20.0); //true
-    writeln(true and false); //false
-    writeln(cos(3.14159265)); //true
 
 end
