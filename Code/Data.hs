@@ -86,6 +86,8 @@ data Definition =
     VarDef [String] VType
     -- Procedures
     | Proc String [(String, VType)] Statement
+    -- list of var names
+    | Id_List [String]
 
 -- this is a wrapper like object that contains everything our map will need
 data Value = 
@@ -96,6 +98,9 @@ data Value =
     -- String values
     | S String
     deriving (Show, Eq)
+
+data State =
+    Curr String [Map.Map String (String, Value)]
 
 -- converts Values to Floats
 toFloat :: Value -> Float
@@ -115,8 +120,12 @@ toString (R val) = show(val)
 toString (S val) = show(val)
 
 -- puts new values into the map
-putVal :: [Map.Map String (String, Value)] -> String -> (String, Value) -> [Map.Map String (String, Value)]
-putVal mapName key (valType, val) =  [Map.insert key (valType, val) (head mapName)]
+
+putVal :: [Map.Map String (String, Value)] -> String -> (String, Value) -> ([Map.Map String (String, Value)] )
+putVal mapName key (valType, val) = [Map.insert key (valType, val) (head mapName)]
+    -- let mapInsert = Map.insert key (valType, val) (head mapName) in  
+    --     ("", mapName)
+
 
 retrieveVal :: [Map.Map String (String, Value)] -> String -> Value
 retrieveVal [mapName] key = case (Map.lookup key mapName) of
@@ -126,13 +135,16 @@ retrieveVal mapName key = case (Map.lookup key (head mapName)) of
         Just (_, val) -> val
         Nothing -> retrieveVal (tail mapName) key
 
+retrieveVal [mapName] key = case (Map.lookup key mapName) of
+        Just (_, val) -> val 
+        Nothing -> error("Variable " ++ key ++ " is not in scope")
+        
+
+
 
 retrieveType :: [Map.Map String (String, Value)] -> String -> String
-retrieveType [mapName] key = case (Map.lookup key mapName) of
-        Just (valType, _) -> valType
-        Nothing -> error("Variable " ++ key ++ " is not in scope") 
 retrieveType mapName key = case (Map.lookup key (head mapName)) of
-        Just (valType, _) -> valType
+        Just (valType, _) -> valType 
         Nothing -> retrieveType (tail mapName) key
 
 -- Data-structure for hole program

@@ -59,8 +59,19 @@ intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
 
+
+intStart :: Program -> [Map.Map String (String, Value)] -> String
+intStart ([],[]) map = ""
+intStart(_,x:xs) map = let curr = intStatement x map in
+    (fst curr) ++ (intStart ([], xs) $ snd curr)
+
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
-intStatement (Assign varName value) m = (varName ++ "is assigned a value", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+
+
+-- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
+-- intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+
 -- intStatement (Block innerCode) m = interpret innerCode
 -- intStatement (If conditional code) m = do
 --     if(toBool(intBoolExp(conditional m)))
@@ -75,7 +86,8 @@ intWriteln _ _ = error "Invalid Writeln"
 
 
 interpret :: Program -> String
--- interpret x = interpretStart x Map.empty
+interpret ([],[]) = "";
+interpret x = intStart x [Map.empty]
 interpret _ = error "Invalid Program"
 --interpret program = interpretStart program [Map.empty]
 
@@ -91,4 +103,3 @@ interpret _ = error "Invalid Program"
 -- Get break and continue keywords to work
 -- Get user defined procedures and functions to work
 -- Implement Scoping
-    
