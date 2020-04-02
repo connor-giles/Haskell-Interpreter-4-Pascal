@@ -1,9 +1,7 @@
 program SimpleExpressions;
 
 var 
- test1 : real;
- test2 : real;
- test3 : real;
+ test1, test2, test3 : real;
 
 begin
     cosTest := cos(3.14159265);
@@ -16,5 +14,9 @@ begin
     writeln(sqrtTest);
     writeln(expTest);
     writeln(lnTest);
+
+    test1 := 55.0;
+    writeln(55.0);
+    
     writeln("I am so good at programing");
 end

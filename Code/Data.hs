@@ -92,7 +92,9 @@ data Statement =
     -- Break statement
     | Break_S
     -- Variable definition, list of var, type
-    | VarDef String VType
+    | VarDef [String] VType
+
+    | Function String Statement VType Statement [Statement]
 
 data VType = REAL | BOOL | STRING
 

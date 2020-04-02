@@ -103,8 +103,11 @@ intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.M
 
 intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
 intStatement (WriteLiteral value) m = (value ++ "\n", m)
-intStatement (VarDef varName varType) m = ("", putVal m varName ((intDeclareType varType m),(intDeclareVal varType m)))
 
+intStatement (VarDef [] _) _ = ("", [Map.empty]) 
+intStatement (VarDef (s:ss) varType) m = 
+    let curr = putVal m s ((intDeclareType varType m),(intDeclareVal varType m)) in
+        (intStatement (VarDef ss varType) curr)
 
 
 intStatement (Assign varName value) m = ("", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))

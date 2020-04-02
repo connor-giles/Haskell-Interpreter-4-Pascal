@@ -34,6 +34,7 @@ import Lexer
         ':='            { Token _ (TokenOp ":=")     }
         '('             { Token _ (TokenK  "(")      }
         ')'             { Token _ (TokenK  ")")      }
+        'function'      { Token _ (TokenK "function")   }
         'begin'         { Token _ (TokenK "begin")   }
         'end'           { Token _ (TokenK "end")     }
         'true'          { Token _ (TokenK "true")    }
@@ -86,6 +87,10 @@ Type :: {VType}
     | 'real'    { REAL }
     | 'string'  { STRING }
 
+ID_list :: {[String]}
+    : ID {[$1]}
+    | ID ',' ID_list { $1:$3 }
+
 -- Expressions
 Exp :: {Exp}
     : '(' Exp ')' { $2 } -- ignore brackets
@@ -131,12 +136,11 @@ Statement :: {Statement}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' ';' {While $3 $7}
     | 'for' ID ':=' GenExp 'to' Exp 'do' 'begin' Statements 'end' ';' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' ';' {Write $3}
-
     | 'writeln' '(' Lit ')' ';' {WriteLiteral $3}
-
     | 'Continue' ';' {Continue_S}
     | 'Break' ';' {Break_S}
-    |  ID ':' Type ';' { VarDef $1 $3 }
+    |  ID_list ':' Type ';' { VarDef $1 $3 }
+    | 'function' ID '(' Statement ')' ':' Type ';' Statement 'begin' Statements 'end' ';' {Function $2 $4 $7 $9 $11} 
     
 
 {}
