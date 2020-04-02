@@ -58,7 +58,6 @@ intBoolExp _ _ = error "Invalid intBoolExp"
 intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
-
 intGenExpVal (VarExp varName) m = (retrieveVal m varName)
 
 
@@ -66,7 +65,6 @@ intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
 intGenExpType (VarExp varName) m = (retrieveType m varName)
-
 
 
 intDeclareVal :: VType -> [Map.Map String (String, Value)] -> Value
@@ -132,11 +130,6 @@ intStatement (For varName startVal endVal s) m =
                         let update = intStatement (For varName (valToGenExp nextValue) endVal s) updatedMap in
                             (output ++ fst update, m)
             else ("" , m)
-
-
-
-
-
 
 
 

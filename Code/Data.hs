@@ -125,15 +125,19 @@ toString (S val) = show(val)
 
 genExpToExp :: GenExp -> [Map.Map String (String, Value)] -> Exp
 genExpToExp (FloatExp e1) _ = e1
-genExpToExp (BExp b) _ = error "Cannot convert to Exp"
-genExpToExp (VarExp s) _ = error "Cannot convert to Exp"
+genExpToExp (BExp _) _ = error "Cannot convert to Exp"
+genExpToExp (VarExp _) _ = error "Cannot convert to Exp"
 
 
 valToExp :: Value -> [Map.Map String (String, Value)] -> Exp
 valToExp (R e1) _  =  Real e1 
+valToExp (B _) _ = error "Cannot convert to Exp"
+valToExp (S _) _ = error "Cannot convert to Exp"
 
 valToGenExp :: Value -> GenExp
 valToGenExp (R r) = FloatExp (Real r)
+valToGenExp (B _) = error "Cannot convert to GenExp"
+valToGenExp (S _) = error "Cannot convert to GenExp"
 
 -- puts new values into the map
 
