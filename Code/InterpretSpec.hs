@@ -131,13 +131,22 @@ main = hspec $ do
             intBoolExp (Var_B "test1") ([Map.fromList [("test1", ("Boolean", B False))]]) `shouldBe` (B False)
             intBoolExp (Var_B "test1") ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
 
-  -- UNIT TESTS FOR intGenExp
+  -- UNIT TESTS FOR intGenExpVal
   describe "intGenExpVal" $ do
     context "Float Expressions" $ do
         it "tests float expresssions" $ do
             intGenExpVal (FloatExp (Real 5.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (R 5.0)
         it "tests boolean expresssions" $ do
             intGenExpVal (BExp True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` (B True)
+
+
+-- UNIT TESTS FOR intGenExpType
+  describe "intGenExpType" $ do
+    context "Float Expressions" $ do
+        it "tests float expresssions" $ do
+            intGenExpType (FloatExp (Real 5.0)) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` "Real"
+        it "tests boolean expresssions" $ do
+            intGenExpType (BExp True_C) ([Map.fromList [("test1", ("Boolean", B True))]]) `shouldBe` "Boolean"
 
   -- UNIT TESTS FOR intStatement
   describe "intStatement" $ do

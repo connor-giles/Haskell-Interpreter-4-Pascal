@@ -58,10 +58,10 @@ intGenExpVal (VarExp varName) m = (retrieveVal m varName)
 intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
-
+intGenExpType (VarExp varName) m = (retrieveType m varName)
 
 intStart :: Program -> [Map.Map String (String, Value)] -> String
-intStart ([],[]) mapName = ""
+intStart ([],[]) _ = ""
 intStart(_,x:xs) mapName = let curr = intStatement x mapName in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
@@ -87,7 +87,6 @@ interpret x = intStart x [Map.empty]
 
 -- =======TODO=======
 -- Get variable declarations/definitions working
--- Get Boolean/Logical Expressions to work
 -- Get Decision Making to work
 -- Get while-do and for-do loops to work
 -- Get break and continue keywords to work
