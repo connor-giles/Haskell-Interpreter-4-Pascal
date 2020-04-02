@@ -90,12 +90,20 @@ intStatement (WriteLiteral value) m = (value ++ "\n", m)
 
 intStatement (Assign varName value) m = (varName ++ " is assigned a value " ++ "\n", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
-intStatement (If b ifStatement elseStatment) m = do
+intStatement (If b ifStatement elseStatment) m = do  --KINDA BROKEN WRITELN WON'T PRINT
     if(toBool(intBoolExp b m))
         then intBlock ifStatement m
         else intBlock elseStatment m
 
 intStatement (Block s) m = ((intStart ([],s) m), m)
+
+intStatement (While b s) m = 
+    if (toBool(intBoolExp b m))
+        then 
+            let (output, newMap) = intStatement (head s) m
+                (newOutput, updatedMap) = intStatement (While b s) newMap in
+                    (output ++ newOutput, m)
+    else (" " , m)
 
 
 -- intStatement (Op2 op e1 e2) m = ("Op2 Succesfull " ++ toFloat(intExp(op e1 e2)), m)
