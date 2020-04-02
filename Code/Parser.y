@@ -52,7 +52,7 @@ import Lexer
         'do'            { Token _ (TokenK "do")      }
         'var'           { Token _ (TokenK "var")     }
         ':'             { Token _ (TokenK ":")       }
-        'boolean'       { Token _ (TokenK "bool")    }
+        'boolean'       { Token _ (TokenK "boolean")    }
         'real'          { Token _ (TokenK "real")    }
         'string'        { Token _ (TokenK "string")  }
         ','             { Token _ (TokenK ",")       }
@@ -129,7 +129,7 @@ Statement :: {Statement}
     : ID ':=' GenExp ';' { Assign $1 $3 }
     | 'if' '(' BoolExp ')' 'then' 'begin' Statements 'end''else''begin' Statements 'end' {If $3 $7 $11}
     | 'while' '(' BoolExp ')' 'do' 'begin' Statements 'end' ';' {While $3 $7}
-    | 'for' ID ':=' GenExp 'to' GenExp 'do' 'begin' Statements 'end' ';' {For $2 $4 $6 $9 } 
+    | 'for' ID ':=' GenExp 'to' Exp 'do' 'begin' Statements 'end' ';' {For $2 $4 $6 $9 } 
     | 'writeln' '(' GenExp ')' ';' {Write $3}
 
     | 'writeln' '(' Lit ')' ';' {WriteLiteral $3}

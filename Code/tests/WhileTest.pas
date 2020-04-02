@@ -1,4 +1,4 @@
-program SimplePrint;
+program WhileTest;
 
 var
 test : boolean; 
