@@ -5,7 +5,7 @@ module Interpret
     intBoolExp,
     intGenExpVal,
     intGenExpType,
-    --intStatement,
+    intStatement,
     intWriteln
 )
 where
@@ -95,6 +95,7 @@ intStatement (Block s) m = ((intStart ([],s) m), m)
 
 -- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
 -- intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+
 -- intStatement (Block innerCode) m = interpret innerCode
 -- intStatement (If conditional code) m = do
 --     if(toBool(intBoolExp(conditional m)))
@@ -104,7 +105,7 @@ intWriteln :: Statement -> [Map.Map String (String, Value)] -> String
 intWriteln _ _ = error "Invalid Writeln"
 
 -- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)
--- intDefinitions (VarDef varNames varType, _ ) m = 
+-- intDefinitions (x, y) m = 
 
 
 interpret :: Program -> String
