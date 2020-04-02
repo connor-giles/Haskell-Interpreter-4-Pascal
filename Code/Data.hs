@@ -16,6 +16,9 @@ module Data
         putVal,
         retrieveType,
         retrieveVal,
+        valToExp,
+        genExpToExp,
+        valToGenExp,
         Program
         
     ) where
@@ -34,6 +37,9 @@ data Exp =
     | Real Float
     -- variable: e.g. Var "x"
     | Var String
+    -- convert to GenExpToExp
+    | Val Value
+
     deriving (Show, Eq)
 
 -- Data-structure for boolean expressions
@@ -49,6 +55,8 @@ data BoolExp =
     | False_C
     -- not sure what this does rn
     | Var_B String
+
+    | BoolToExpr Bool
     deriving (Show, Eq)
 
 data GenExp = 
@@ -74,7 +82,7 @@ data Statement =
     -- While loop
     | While BoolExp [Statement]
     -- For loop
-    | For String GenExp GenExp [Statement]
+    | For String GenExp Exp [Statement]
     -- Write
     | Write GenExp
     -- Write String Literals
@@ -114,6 +122,18 @@ toString ::  Value -> String
 toString (B val) = show(val)
 toString (R val) = show(val)
 toString (S val) = show(val)
+
+genExpToExp :: GenExp -> [Map.Map String (String, Value)] -> Exp
+genExpToExp (FloatExp e1) _ = e1
+genExpToExp (BExp b) _ = error "Cannot convert to Exp"
+genExpToExp (VarExp s) _ = error "Cannot convert to Exp"
+
+
+valToExp :: Value -> [Map.Map String (String, Value)] -> Exp
+valToExp (R e1) _  =  Real e1 
+
+valToGenExp :: Value -> GenExp
+valToGenExp (R r) = FloatExp (Real r)
 
 -- puts new values into the map
 
