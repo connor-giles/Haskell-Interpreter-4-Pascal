@@ -54,19 +54,44 @@ intBoolExp _ _ = error "Invalid intBoolExp"
 intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
+intGenExpVal (VarExp i) m = (retrieveVal m i)
 
 intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
 
+intBlock :: [Statement] -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
+intBlock [] [] = ("" , [Map.empty])
+intBlock [] m = ("" , m)
+
+intBlock (s:ss) m = 
+    let curr = intStatement s m in
+        (fst curr, snd (intBlock ss (snd curr)))
+       
+intBlock (s : _ ) m = intStatement s m 
+
+
+
 intStart :: Program -> [Map.Map String (String, Value)] -> String
-intStart ([],[]) map = ""
-intStart(_,x:xs) map = let curr = intStatement x map in
+intStart ([],[]) mapName = ""
+intStart(_,x:xs) mapName = let curr = intStatement x mapName in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
-intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
+intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
+
+intStatement (Assign varName value) m = (varName ++ " is assigned a value " ++ "\n", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+
+intStatement (If b ifStatement elseStatment) m = do
+    if(toBool(intBoolExp b m))
+        then intBlock ifStatement m
+        else intBlock elseStatment m
+
+intStatement (Block s) m = ((intStart ([],s) m), m)
+
+
+-- intStatement (Op2 op e1 e2) m = ("Op2 Succesfull " ++ toFloat(intExp(op e1 e2)), m)
 
 -- intStatement :: Statement -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
 -- intStatement (Assign varName value) m = (putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
@@ -76,7 +101,6 @@ intStatement (Assign varName value) m = (varName ++ "is assigned a value ", putV
 --         then interpret 
 
 intWriteln :: Statement -> [Map.Map String (String, Value)] -> String
-intWriteln (Write value) m = toString(intGenExpVal value m)
 intWriteln _ _ = error "Invalid Writeln"
 
 -- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)

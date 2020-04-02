@@ -56,6 +56,8 @@ data GenExp =
     FloatExp Exp 
     -- boolean expressions
     | BExp BoolExp
+    -- VARNAME 
+    | VarExp String
     deriving (Show, Eq)
 
 -- Data-structure for statements
@@ -63,10 +65,10 @@ data Statement =
     -- TODO: add other statements
     -- Variable assignment
      Assign String GenExp
+    --Block 
+    | Block [Statement]
     -- If statement
     | If BoolExp [Statement] [Statement]
-    -- Block
-    | Block [Statement]
     -- While loop
     | While BoolExp [Statement]
     -- For loop
