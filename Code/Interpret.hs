@@ -5,8 +5,7 @@ module Interpret
     intBoolExp,
     intGenExpVal,
     intGenExpType,
-    intStatement,
-    intWriteln
+    intStatement
 )
 where
 
@@ -54,11 +53,15 @@ intBoolExp _ _ = error "Invalid intBoolExp"
 intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
-intGenExpVal (VarExp i) m = (retrieveVal m i)
+
+intGenExpVal (VarExp varName) m = (retrieveVal m varName)
+
 
 intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
+intGenExpType (VarExp varName) m = (retrieveType m varName)
+
 
 intBlock :: [Statement] -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
 intBlock [] [] = ("" , [Map.empty])
@@ -74,12 +77,16 @@ intBlock (s : _ ) m = intStatement s m
 
 intStart :: Program -> [Map.Map String (String, Value)] -> String
 intStart ([],[]) mapName = ""
+
 intStart(_,x:xs) mapName = let curr = intStatement x mapName in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
 
+
 intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
+intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
+intStatement (WriteLiteral value) m = (value ++ "\n", m)
 
 intStatement (Assign varName value) m = (varName ++ " is assigned a value " ++ "\n", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
@@ -101,8 +108,7 @@ intStatement (Block s) m = ((intStart ([],s) m), m)
 --     if(toBool(intBoolExp(conditional m)))
 --         then interpret 
 
-intWriteln :: Statement -> [Map.Map String (String, Value)] -> String
-intWriteln _ _ = error "Invalid Writeln"
+
 
 -- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)
 -- intDefinitions (x, y) m = 
@@ -111,17 +117,13 @@ intWriteln _ _ = error "Invalid Writeln"
 interpret :: Program -> String
 interpret ([],[]) = "";
 interpret x = intStart x [Map.empty]
-interpret _ = error "Invalid Program"
---interpret program = interpretStart program [Map.empty]
 
     
 
 
 -- =======TODO=======
 -- Get variable declarations/definitions working
--- Get Boolean/Logical Expressions to work
 -- Get Decision Making to work
--- Get special expressions to evauluate
 -- Get while-do and for-do loops to work
 -- Get break and continue keywords to work
 -- Get user defined procedures and functions to work

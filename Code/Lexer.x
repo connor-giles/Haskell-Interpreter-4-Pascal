@@ -33,7 +33,6 @@ import qualified Data.ByteString.Lazy.Char8 as B
 $digit = 0-9                    -- digits
 $alpha = [a-zA-Z]               -- alphabetic characters
 
-
 -- TODO: Map symbols into token types (with or without parameters)
 tokens :-
   $white+                                   ; -- remove multiple white-spaces
@@ -44,12 +43,13 @@ tokens :-
   $digit+\.$digit*                          { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]|:=                { tok_string     TokenOp  }
   [\<]|[\>]|\<=|\>=                         { tok_string     TokenOp  }
-  [\(]|[\)]|begin|end|true|false            { tok_string     TokenK   }
+  [\(]|[\)]|begin|end|true|false|[\"]       { tok_string     TokenK   }
   [\:]|[\;]|and|not|var|bool|real|string    { tok_string     TokenK   }
   while|do|for|to|writeln|if|else           { tok_string     TokenK   }
-  [\,]|ID_List|program|then|or              { tok_string     TokenK   }
+  [\,]|ID_List|program|then|or|exp          { tok_string     TokenK   }
   sqrt|ln|sin|cos|Continue|Break            { tok_string     TokenK   }
   $alpha [$alpha $digit \_ \']*             { tok_string     TokenID  }
+  \".*\"                                    { tok_string     TokenLit }
 {
 
 -- Some action helpers:
@@ -70,11 +70,12 @@ tokenToPosN (Token p _) = p
 -- THIS IS THE GLUE BETWEEN HAPPY AND ALEX
  
 data TokenClass
- = TokenOp     String
- | TokenK      String
- | TokenInt    Int
+ = TokenOp      String
+ | TokenK       String
+ | TokenInt     Int
  | TokenFloat   Float
- | TokenID    String
+ | TokenID      String
+ | TokenLit     String
  | TokenEOF
  deriving (Eq, Show)
 
