@@ -1,12 +1,14 @@
 program SimplePrint;
 
-var test1, test2, test3 : real;
+var 
+test1 : real;
+test2 : real;
+test3 : real;
+test4 : real;
 
 begin
-    writeln(20.0 < 15.0); //false
-    writeln(20.0 <= 15.0); //fales
-    writeln(20.0 > 15.0); //true
-    writeln(20.0 >= 20.0); //true
-    writeln(true and false); //false
-    writeln(cos(3.14159265)); //true
+    writeln(test1);
+    writeln(test2);
+    writeln(test3);
+    writeln(test4); 
 end
