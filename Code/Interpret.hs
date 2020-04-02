@@ -94,10 +94,10 @@ intBlock (s : _ ) m = intStatement s m
 
 
 intStart :: Program -> [Map.Map String (String, Value)] -> String
-intStart ([],[]) mapName = ""
+intStart ([]) mapName = ""
 
-intStart(_,x:xs) mapName = let curr = intStatement x mapName in
-    (fst curr) ++ (intStart ([], xs) $ snd curr)
+intStart(x:xs) mapName = let curr = intStatement x mapName in
+    (fst curr) ++ (intStart (xs) $ snd curr)
 
 
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
@@ -117,7 +117,7 @@ intStatement (If b ifStatement elseStatment) m = do  --KINDA BROKEN WRITELN WON'
         then intBlock ifStatement m
         else intBlock elseStatment m
 
-intStatement (Block s) m = ((intStart ([],s) m), m)
+intStatement (Block s) m = ((intStart (s) m), m)
 
 intStatement (While b s) m = 
     if (toBool(intBoolExp b m))
@@ -141,10 +141,10 @@ intStatement (While b s) m =
 
 
 
-intStart :: Program -> [Map.Map String (String, Value)] -> String
-intStart [] _ = ""
-intStart (x:xs) mapName = let curr = intStatement x mapName in
-    (fst curr) ++ (intStart (xs) $ snd curr)
+-- intStart :: Program -> [Map.Map String (String, Value)] -> String
+-- intStart [] _ = ""
+-- intStart (x:xs) mapName = let curr = intStatement x mapName in
+--     (fst curr) ++ (intStart (xs) $ snd curr)
 
 
 interpret :: Program -> String
