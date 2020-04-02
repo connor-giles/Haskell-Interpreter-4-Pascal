@@ -7,7 +7,7 @@ module Data
         BoolExp(..),
         Statement(..),
         VType(..),
-        Definition(..),
+        --Definition(..),
         GenExp(..),
         Value(..),
         toFloat,
@@ -83,17 +83,10 @@ data Statement =
     | Continue_S
     -- Break statement
     | Break_S
+    -- Variable definition, list of var, type
+    | VarDef String VType
 
 data VType = REAL | BOOL | STRING
-
---Might need to change back to VType who noes
-data Definition = 
-    -- Variable definition, list of var, type
-    VarDef [String] VType
-    -- Procedures
-    | Proc String [(String, VType)] Statement
-    -- list of var names
-    | Id_List [String]
 
 -- this is a wrapper like object that contains everything our map will need
 data Value = 
@@ -104,9 +97,6 @@ data Value =
     -- String values
     | S String
     deriving (Show, Eq)
-
-data State =
-    Curr String [Map.Map String (String, Value)]
 
 -- converts Values to Floats
 toFloat :: Value -> Float
@@ -150,4 +140,4 @@ retrieveType mapName key = case (Map.lookup key (head mapName)) of
 -- Data-structure for hole program
 -- TODO: add declarations and other useful stuff
 -- Hint: make a tuple containing the other ingredients
-type Program = ([Definition], [Statement])
+type Program = [Statement]

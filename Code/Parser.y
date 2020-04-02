@@ -75,25 +75,16 @@ import Lexer
 %%
 
 -- Entry point
+--Program :: {Program}
+--    : Defs 'begin' Statements 'end' { ($1, $3) }
+
 Program :: {Program}
-    : Defs 'begin' Statements 'end' { ($1, $3) }
-
-Defs :: {[Definition]}
-    : { [] } -- nothing; make empty list
-    | Definition Defs { $1:$2 } -- put statement as first element of statements
-
-Definition :: {Definition}
-    : 'var' ID_List ':' Type ';' { VarDef $2 $4 }  
-
+    : 'var' Statements 'begin' Statements 'end' { $2 ++ $4 }
 
 Type :: {VType}
     : 'boolean' { BOOL }
     | 'real'    { REAL }
     | 'string'  { STRING }
-
-ID_List :: {[String]}
-    : ID {[$1]}
-    | ID ',' ID_List { $1:$3 }
 
 -- Expressions
 Exp :: {Exp}
@@ -145,6 +136,7 @@ Statement :: {Statement}
 
     | 'Continue' ';' {Continue_S}
     | 'Break' ';' {Break_S}
+    |  ID ':' Type ';' { VarDef $1 $3 }
     
 
 {}

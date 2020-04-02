@@ -1,11 +1,14 @@
 module Interpret 
 (
     interpret,
+    intStart,
     intExp,
     intBoolExp,
     intGenExpVal,
     intGenExpType,
-    intStatement
+    intStatement,
+    intDeclareVal,
+    intDeclareType
 )
 where
 
@@ -37,6 +40,7 @@ intExp (Op2 "/" _ (Real 0.0)) _ = error "Cannot divide by zero"
 intExp (Op2 "/" e1 e2) m = (R (toFloat(intExp e1 m) / toFloat(intExp e2 m) ))
 intExp _ _ = error "Invalid intExp"
 
+
 intBoolExp :: BoolExp -> [Map.Map String (String, Value)] -> Value
 intBoolExp (True_C) _ = (B True)
 intBoolExp (False_C) _ = (B False)
@@ -50,6 +54,7 @@ intBoolExp (Comp "<" e1 e2) m = (B ((toFloat(intExp e1 m)) < (toFloat(intExp e2 
 intBoolExp (Comp "<=" e1 e2) m = (B ((toFloat(intExp e1 m)) <= (toFloat(intExp e2 m))))
 intBoolExp _ _ = error "Invalid intBoolExp"
 
+
 intGenExpVal :: GenExp -> [Map.Map String (String, Value)] -> Value
 intGenExpVal (FloatExp e1) m = (intExp e1 m)
 intGenExpVal (BExp e1) m = (intBoolExp e1 m)
@@ -61,6 +66,19 @@ intGenExpType :: GenExp -> [Map.Map String (String, Value)] -> String
 intGenExpType (FloatExp _) _ = "Real"
 intGenExpType (BExp _) _ = "Boolean" 
 intGenExpType (VarExp varName) m = (retrieveType m varName)
+
+
+
+intDeclareVal :: VType -> [Map.Map String (String, Value)] -> Value
+intDeclareVal (REAL) _ = R 0.0
+intDeclareVal (BOOL) _ = B False
+intDeclareVal (STRING) _ = S ""
+
+
+intDeclareType :: VType -> [Map.Map String (String, Value)] -> String
+intDeclareType (REAL) _ = "Real"
+intDeclareType (BOOL) _ = "Boolean"
+intDeclareType (STRING) _ = "String"
 
 
 intBlock :: [Statement] -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
@@ -81,12 +99,16 @@ intStart ([],[]) mapName = ""
 intStart(_,x:xs) mapName = let curr = intStatement x mapName in
     (fst curr) ++ (intStart ([], xs) $ snd curr)
 
+
 intStatement :: Statement -> [Map.Map String (String, Value)] -> (String, [Map.Map String (String, Value)])
 
 
 intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
 intStatement (Write value) m = (toString(intGenExpVal value m) ++ "\n", m)
 intStatement (WriteLiteral value) m = (value ++ "\n", m)
+intStatement (VarDef varName varType) m = (varName ++ " was declared\n", putVal m varName ((intDeclareType varType m),(intDeclareVal varType m)))
+
+
 
 intStatement (Assign varName value) m = (varName ++ " is assigned a value " ++ "\n", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
@@ -118,19 +140,22 @@ intStatement (While b s) m =
 
 
 
--- intDefinitions :: ([Definition], [Statement]) ->  Map.Map String (String, Value) -> Map.Map String (String, Value)
--- intDefinitions (x, y) m = 
+
+intStart :: Program -> [Map.Map String (String, Value)] -> String
+intStart [] _ = ""
+intStart (x:xs) mapName = let curr = intStatement x mapName in
+    (fst curr) ++ (intStart (xs) $ snd curr)
 
 
 interpret :: Program -> String
-interpret ([],[]) = "";
+interpret [] = "";
 interpret x = intStart x [Map.empty]
 
     
 
 
 -- =======TODO=======
--- Get variable declarations/definitions working
+-- Get variable declarations working
 -- Get Decision Making to work
 -- Get while-do and for-do loops to work
 -- Get break and continue keywords to work
