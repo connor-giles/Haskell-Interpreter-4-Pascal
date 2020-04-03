@@ -24,14 +24,23 @@ import qualified Data.Map.Strict as Map
 
 -- Pascal: Prelude.head: empty list likely means the variable name is wrong in test file
 
+multiAssign :: [String] -> [String] -> [Map.Map String (String, Value)] -> [Map.Map String (String, Value)]
+multiAssign (x:xs) (y:ys) m = 
+    let (_, newMap) = intStatement (Assign x (valToGenExp (retrieveVal m y ))) m in
+        (multiAssign xs ys newMap)
+
+multiAssign _ _ m = m
+
+
 intExp :: Exp -> [Map.Map String (String, Value)] -> Value
 
 intExp (FunCall name exps) m = 
-    let stack = retrieveVal m name in
-        let (eval, newMap) = intBlock (toStatements stack) m in
-            (retrieveVal newMap name)
-            
+        let stack = retrieveVal m name in
+            let newMap = multiAssign (fst (toStatements stack)) exps m in
+                let ("", updatedMap) = intBlock (snd (toStatements stack)) newMap in  
+                    (retrieveVal updatedMap name)
 
+            
 intExp (Real e1) _ = (R e1)
 intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
@@ -115,7 +124,7 @@ intStatement (VarDef (s:ss) varType) m =
         (intStatement (VarDef ss varType) curr)
 
 
-intStatement (Assign varName value) m = ("", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
+intStatement (Assign varName value) m = ("" , putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
 intStatement (If b ifStatement elseStatment) m = do  
     if(toBool(intBoolExp b m))
@@ -144,9 +153,12 @@ intStatement (For varName startVal endVal s) m =
 
 --[Map.Map String (String, Value)] -> String -> (String, Value) 
 
-intStatement (Function fName decs dect ft fs) m = 
-    let (def, newMap) = intStatement (VarDef decs dect) m in
-        ("" , putVal newMap fName ((intDeclareType ft newMap), (F fs)) ) 
+
+intStatement (Function fName decs _ ft fs) m = ("", putVal m fName ((intDeclareType ft m), (F (decs, fs)) )) -- returns a map with the Fucntion and its list of statements
+
+    --let ( _, newMap) = intStatement (VarDef decs dect) m in
+       -- ("", putVal m fName ((intDeclareType ft m), (F (decs, fs)) )) -- returns a map with the Fucntion and its list of statements
+
 
 
 
