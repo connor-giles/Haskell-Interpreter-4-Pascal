@@ -9,12 +9,12 @@ test4 : real;
 
 begin
 
-function add (var1, var2 : real) : real;
+function add (var1, var2 : real;) : real;
 var
     foo : real;
 begin
     foo := 5.0;
-    add = foo + var1;
+    add := foo + var1;
 end;
      
     test1 := 10.0; 
