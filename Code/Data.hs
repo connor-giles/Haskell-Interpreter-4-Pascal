@@ -40,7 +40,7 @@ data Exp =
     -- convert to GenExpToExp
     | Val Value
 
-    deriving (Show, Eq)
+    --deriving (Show, Eq)
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -57,7 +57,7 @@ data BoolExp =
     | Var_B String
 
     | BoolToExpr Bool
-    deriving (Show, Eq)
+    --deriving (Show, Eq)
 
 data GenExp = 
     -- float expressions
@@ -68,7 +68,7 @@ data GenExp =
     -- VARNAME 
 
     | VarExp String
-    deriving (Show, Eq)
+    --deriving (Show, Eq)
 
 -- Data-structure for statements
 data Statement = 
@@ -94,7 +94,7 @@ data Statement =
     -- Variable definition, list of var, type
     | VarDef [String] VType
 
-    | Function String Statement VType Statement [Statement]
+    | Function String Statement VType [Statement]
 
 data VType = REAL | BOOL | STRING
 
@@ -106,7 +106,9 @@ data Value =
     | B Bool
     -- String values
     | S String
-    deriving (Show, Eq)
+   
+    | F [Statement]
+    -- deriving (Show, Eq)
 
 -- converts Values to Floats
 toFloat :: Value -> Float

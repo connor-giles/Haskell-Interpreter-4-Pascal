@@ -34,7 +34,7 @@ import Lexer
         ':='            { Token _ (TokenOp ":=")     }
         '('             { Token _ (TokenK  "(")      }
         ')'             { Token _ (TokenK  ")")      }
-        'function'      { Token _ (TokenK "function")   }
+        'function'      { Token _ (TokenK "function")}
         'begin'         { Token _ (TokenK "begin")   }
         'end'           { Token _ (TokenK "end")     }
         'true'          { Token _ (TokenK "true")    }
@@ -140,7 +140,7 @@ Statement :: {Statement}
     | 'Continue' ';' {Continue_S}
     | 'Break' ';' {Break_S}
     |  ID_list ':' Type ';' { VarDef $1 $3 }
-    | 'function' ID '(' Statement ')' ':' Type ';' Statement 'begin' Statements 'end' ';' {Function $2 $4 $7 $9 $11} 
+    | 'function' ID '(' Statement ')' ':' Type ';' 'var' Statements 'begin' Statements 'end' ';' {Function $2 $4 $7 ($10 ++ $12)} 
     
 
 {}

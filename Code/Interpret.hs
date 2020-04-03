@@ -25,6 +25,12 @@ import qualified Data.Map.Strict as Map
 -- Pascal: Prelude.head: empty list likely means the variable name is wrong in test file
 
 intExp :: Exp -> [Map.Map String (String, Value)] -> Value
+
+intExp (FunCall name exps) m = (retrieveVal m name)
+    -- let stack = (retrieveVal m name) in
+    --     let eval = intBlock stack in
+
+
 intExp (Real e1) _ = (R e1)
 intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
@@ -112,7 +118,7 @@ intStatement (VarDef (s:ss) varType) m =
 
 intStatement (Assign varName value) m = ("", putVal m varName ((intGenExpType value m),(intGenExpVal value m)))
 
-intStatement (If b ifStatement elseStatment) m = do  --KINDA BROKEN WRITELN WON'T PRINT
+intStatement (If b ifStatement elseStatment) m = do  
     if(toBool(intBoolExp b m))
         then intBlock ifStatement m
         else intBlock elseStatment m
@@ -135,6 +141,14 @@ intStatement (For varName startVal endVal s) m =
                         let update = intStatement (For varName (valToGenExp nextValue) endVal s) updatedMap in
                             (output ++ fst update, m)
             else ("" , m)
+
+
+--[Map.Map String (String, Value)] -> String -> (String, Value) 
+
+intStatement (Function fName _ t s) m = ("", putVal m fName ((intDeclareType t m), (F s)) ) -- returns a map with the Fucntion and it's list of statements
+
+
+
 
 
 
