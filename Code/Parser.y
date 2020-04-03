@@ -91,6 +91,10 @@ ID_list :: {[String]}
     : ID {[$1]}
     | ID ',' ID_list { $1:$3 }
 
+Exp_list :: {[Exp]}
+    : Exp {[$1]}
+    | Exp ',' Exp_list {$1:$3}
+
 -- Expressions
 Exp :: {Exp}
     : '(' Exp ')' { $2 } -- ignore brackets
@@ -105,6 +109,7 @@ Exp :: {Exp}
     | Exp '*' Exp { Op2 "*" $1 $3 }
     | Exp '/' Exp { Op2 "/" $1 $3 }
     | Exp '-' Exp { Op2 "-" $1 $3 }
+    | ID '(' ID_list ')' {FunCall $1 $3}
     | ID { Var $1 }
     | float {Real $1}
 
