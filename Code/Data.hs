@@ -93,8 +93,8 @@ data Statement =
     | Break_S
     -- Variable definition, list of var, type
     | VarDef [String] VType
-
-    | Function String Statement VType [Statement]
+    -- Functions
+    | Function String [String] VType VType [Statement]
 
 data VType = REAL | BOOL | STRING
 
@@ -115,17 +115,20 @@ toFloat :: Value -> Float
 toFloat (R val) = val
 toFloat (B _) = error "value not convertible to float"
 toFloat (S _) = error "value not convertible to float"
+toFloat (F _) = error "value not convertible to float"
 
 -- converts Values to Booleans
 toBool :: Value -> Bool
 toBool (B val) = val
 toBool (R _) = error "value not convertible to boolean"
 toBool (S _) = error "value not convertible to boolean"
+toBool (F _) = error "value not convertible to boolean"
 
 toString ::  Value -> String
 toString (B val) = show(val)
 toString (R val) = show(val)
 toString (S val) = show(val)
+toString (F _) = error "value not convertible to boolean"
 
 genExpToExp :: GenExp -> [Map.Map String (String, Value)] -> Exp
 genExpToExp (FloatExp e1) _ = e1
@@ -137,11 +140,13 @@ valToExp :: Value -> [Map.Map String (String, Value)] -> Exp
 valToExp (R e1) _  =  Real e1 
 valToExp (B _) _ = error "Cannot convert to Exp"
 valToExp (S _) _ = error "Cannot convert to Exp"
+valToExp (F _) _ = error "Cannot convert to Exp"
 
 valToGenExp :: Value -> GenExp
 valToGenExp (R r) = FloatExp (Real r)
 valToGenExp (B _) = error "Cannot convert to GenExp"
 valToGenExp (S _) = error "Cannot convert to GenExp"
+valToGenExp (F _) = error "Cannot convert to GenExp"
 
 -- puts new values into the map
 

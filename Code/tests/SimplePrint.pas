@@ -14,7 +14,7 @@ var
     foo : real;
 begin
     foo := 5.0;
-    add = foo + var1;
+    add := foo + var1;
 end;
      
     test1 := 10.0; 

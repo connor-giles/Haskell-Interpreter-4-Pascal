@@ -143,7 +143,7 @@ intStatement (For varName startVal endVal s) m =
 
 --[Map.Map String (String, Value)] -> String -> (String, Value) 
 
-intStatement (Function fName _ t s) m = ("", putVal m fName ((intDeclareType t m), (F s)) ) -- returns a map with the Fucntion and it's list of statements
+-- intStatement (Function fName _ t s) m = ("", putVal m fName ((intDeclareType t m), (F s)) ) -- returns a map with the Fucntion and it's list of statements
 
 
 
