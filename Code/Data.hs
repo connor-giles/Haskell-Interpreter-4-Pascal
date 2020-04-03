@@ -18,6 +18,7 @@ module Data
         retrieveVal,
         valToExp,
         genExpToExp,
+        toStatements,
         valToGenExp,
         Program
         
@@ -32,7 +33,7 @@ data Exp =
     -- binary operator: Op name leftExpression rightExpression
     | Op2 String Exp Exp 
     -- function call: FunctionCall name ListArguments
-    | FunCall String [Exp]
+    | FunCall String [String]
     -- real value: e.g. Real 1.0
     | Real Float
     -- variable: e.g. Var "x"
@@ -129,6 +130,12 @@ toString (B val) = show(val)
 toString (R val) = show(val)
 toString (S val) = show(val)
 toString (F _) = error "value not convertible to boolean"
+
+toStatements :: Value -> [Statement]
+toStatements (F val) = val
+toStatements (R _) = error "value not convertible to [statement]"
+toStatements (S _) = error "value not convertible to [statement]"
+toStatements (B _) = error "value not convertible to [statement]"
 
 genExpToExp :: GenExp -> [Map.Map String (String, Value)] -> Exp
 genExpToExp (FloatExp e1) _ = e1
