@@ -41,7 +41,7 @@ data Exp =
     -- convert to GenExpToExp
     | Val Value
 
-    --deriving (Show, Eq)
+    deriving (Show, Eq)
 
 -- Data-structure for boolean expressions
 data BoolExp = 
@@ -58,7 +58,8 @@ data BoolExp =
     | Var_B String
 
     | BoolToExpr Bool
-    --deriving (Show, Eq)
+
+    deriving (Show, Eq)
 
 data GenExp = 
     -- float expressions
@@ -69,7 +70,7 @@ data GenExp =
     -- VARNAME 
 
     | VarExp String
-    --deriving (Show, Eq)
+    deriving (Show, Eq)
 
 -- Data-structure for statements
 data Statement = 
@@ -97,7 +98,9 @@ data Statement =
     -- Functions
     | Function String [String] VType VType [Statement]
 
-data VType = REAL | BOOL | STRING
+    deriving (Show, Eq)
+
+data VType = REAL | BOOL | STRING deriving (Show, Eq)
 
 -- this is a wrapper like object that contains everything our map will need
 data Value = 
@@ -109,7 +112,8 @@ data Value =
     | S String
    
     | F ([String], [Statement])
-    -- deriving (Show, Eq)
+
+    deriving (Show, Eq)
 
 -- converts Values to Floats
 toFloat :: Value -> Float

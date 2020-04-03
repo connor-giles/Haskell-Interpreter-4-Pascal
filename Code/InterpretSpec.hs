@@ -202,10 +202,4 @@ main = hspec $ do
         it "tests writeln of literal" $ do
             intStatement (WriteLiteral "This is a test") ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("This is a test\n", [Map.fromList [("test1", ("Real", R 5.0))]])
 
-    context "Variable Declaration" $ do
-        it "tests variable definition for float" $ do
-            intStatement (VarDef "test1" REAL) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("Real", R 0.0))]])
-        it "tests variable definition for boolean" $ do
-            intStatement (VarDef "test1" BOOL) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("Boolean", B False))]])
-        it "tests variable definition for string" $ do
-            intStatement (VarDef "test1" STRING) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("String", S ""))]])
+   
