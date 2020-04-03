@@ -37,7 +37,7 @@ intExp :: Exp -> [Map.Map String (String, Value)] -> Value
 intExp (FunCall name exps) m = 
         let stack = retrieveVal m name in
             let newMap = multiAssign (fst (toStatements stack)) exps m in
-                let ("", updatedMap) = intBlock (snd (toStatements stack)) newMap in  
+                let (_, updatedMap) = intBlock (snd (toStatements stack)) newMap in  
                     (retrieveVal updatedMap name)
 
             

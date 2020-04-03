@@ -9,7 +9,6 @@ function add (var1, var2 : real) : real;
 var
    
 begin
-   
     add := var1 + var2;
 end;
 
