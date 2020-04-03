@@ -27,11 +27,11 @@ import qualified Data.Map.Strict as Map
 intExp :: Exp -> [Map.Map String (String, Value)] -> Value
 
 intExp (FunCall name exps) m = 
-    let stack = retrieveVal m name in
-        let (eval, newMap) = intBlock (toStatements stack) m in
-            (retrieveVal newMap name)
+        let stack = retrieveVal m name in
+            let ("", newMap) = intBlock (toStatements stack) m in  
+                (retrieveVal newMap name)
+intExp (FunCall "" []) m = error "Invalid function"
             
-
 intExp (Real e1) _ = (R e1)
 intExp (Var v1) m = (retrieveVal m v1)
 intExp (Op1 "-" e1) m = (R (-(toFloat(intExp e1 m))))
@@ -144,7 +144,9 @@ intStatement (For varName startVal endVal s) m =
 
 --[Map.Map String (String, Value)] -> String -> (String, Value) 
 
-intStatement (Function fName decs dect ft fs) m = ("", putVal m fName ((intDeclareType ft m), (F fs)) ) -- returns a map with the Fucntion and it's list of statements
+intStatement (Function fName decs dect ft fs) m = 
+    let (def, newMap) = intStatement (VarDef decs dect) m in
+        ("" , putVal newMap fName ((intDeclareType ft newMap), (F fs)) ) -- returns a map with the Fucntion and its list of statements
 
 
 
