@@ -9,8 +9,7 @@ function add (var1, var2 : real) : real;
 var
    
 begin
-    var1 := 20.0;
-    var2 := 5.0;
+   
     add := var1 + var2;
 end;
 
@@ -19,7 +18,8 @@ begin
  
     test1 := 20.0; 
     test2 := 5.0;
-    
+  
+
     functResult := add (test1, test2);
 
     writeln(functResult);
