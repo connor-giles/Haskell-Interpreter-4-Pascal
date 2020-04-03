@@ -144,8 +144,9 @@ intStatement (For varName startVal endVal s) m =
 
 --[Map.Map String (String, Value)] -> String -> (String, Value) 
 
-intStatement (Function fName decs dect ft fs) m = ("", putVal m fName ((intDeclareType ft m), (F fs)) ) -- returns a map with the Fucntion and it's list of statements
-
+intStatement (Function fName decs dect ft fs) m = 
+    let (def, newMap) = intStatement (VarDef decs dect) m in
+        ("" , putVal newMap fName ((intDeclareType ft newMap), (F fs)) ) 
 
 
 
@@ -159,9 +160,5 @@ interpret x = intStart x [Map.empty]
 
 
 -- =======TODO=======
--- Get variable declarations working
--- Get Decision Making to work
--- Get while-do and for-do loops to work
 -- Get break and continue keywords to work
 -- Get user defined procedures and functions to work
--- Implement Scoping
