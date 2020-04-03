@@ -140,7 +140,7 @@ Statement :: {Statement}
     | 'Continue' ';' {Continue_S}
     | 'Break' ';' {Break_S}
     |  ID_list ':' Type ';' { VarDef $1 $3 }
-    | 'function' ID '(' Statement ')' ':' Type ';' 'var' Statements 'begin' Statements 'end' ';' {Function $2 $4 $7 ($10 ++ $12)} 
+    | 'function' ID '(' ID_list ':' Type ')' ':' Type ';' 'var' Statements 'begin' Statements 'end' ';' {Function $2 $4 $6 $9 ($12 ++ $14)} 
     
 
 {}

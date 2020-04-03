@@ -182,19 +182,19 @@ main = hspec $ do
   describe "intStatement" $ do
     context "Float Expressions" $ do
         it "tests assignment of float" $ do
-            intStatement (Assign "test2" (FloatExp (Real 10.0))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("test2 is assigned a value\n", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Real", R 10.0))]])
+            intStatement (Assign "test2" (FloatExp (Real 10.0))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Real", R 10.0))]])
         it "tests writeln of float" $ do
             intStatement (Write (FloatExp (Real 10.0))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("10.0\n", [Map.fromList [("test1", ("Real", R 5.0))]])
 
     context "Boolean Expressions" $ do
         it "tests assignment of boolean" $ do
-            intStatement (Assign "test2" (BExp True_C)) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("test2 is assigned a value\n", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Boolean", B True))]])
+            intStatement (Assign "test2" (BExp True_C)) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Boolean", B True))]])
         it "tests writeln of boolean" $ do
             intStatement (Write (BExp True_C)) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("True\n", [Map.fromList [("test1", ("Real", R 5.0))]])
     
     context "Special Expressions" $ do
         it "tests assignment of special" $ do
-            intStatement (Assign "test2" (FloatExp (Op1 "cos" (Real 3.14159265)))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("test2 is assigned a value\n", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Real", R (-1.0)))]])
+            intStatement (Assign "test2" (FloatExp (Op1 "cos" (Real 3.14159265)))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("", [Map.fromList [("test1", ("Real", R 5.0)), ("test2", ("Real", R (-1.0)))]])
         it "tests writeln of special" $ do    
             intStatement (Write (FloatExp (Op1 "cos" (Real 3.14159265)))) ([Map.fromList [("test1", ("Real", R 5.0))]]) `shouldBe` ("-1.0\n", [Map.fromList [("test1", ("Real", R 5.0))]])
     
@@ -204,8 +204,8 @@ main = hspec $ do
 
     context "Variable Declaration" $ do
         it "tests variable definition for float" $ do
-            intStatement (VarDef "test1" REAL) ([Map.empty]) `shouldBe` ("test1 was declared\n", [Map.fromList [("test1", ("Real", R 0.0))]])
+            intStatement (VarDef "test1" REAL) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("Real", R 0.0))]])
         it "tests variable definition for boolean" $ do
-            intStatement (VarDef "test1" BOOL) ([Map.empty]) `shouldBe` ("test1 was declared\n", [Map.fromList [("test1", ("Boolean", B False))]])
+            intStatement (VarDef "test1" BOOL) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("Boolean", B False))]])
         it "tests variable definition for string" $ do
-            intStatement (VarDef "test1" STRING) ([Map.empty]) `shouldBe` ("test1 was declared\n", [Map.fromList [("test1", ("String", S ""))]])
+            intStatement (VarDef "test1" STRING) ([Map.empty]) `shouldBe` ("", [Map.fromList [("test1", ("String", S ""))]])
