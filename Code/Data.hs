@@ -108,7 +108,7 @@ data Value =
     -- String values
     | S String
    
-    | F [Statement]
+    | F ([String], [Statement])
     -- deriving (Show, Eq)
 
 -- converts Values to Floats
@@ -131,8 +131,8 @@ toString (R val) = show(val)
 toString (S val) = show(val)
 toString (F _) = error "value not convertible to boolean"
 
-toStatements :: Value -> [Statement]
-toStatements (F val) = val
+toStatements :: Value -> ([String], [Statement])
+toStatements (F (strs, val)) = (strs, val)
 toStatements (R _) = error "value not convertible to [statement]"
 toStatements (S _) = error "value not convertible to [statement]"
 toStatements (B _) = error "value not convertible to [statement]"
