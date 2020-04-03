@@ -38,8 +38,8 @@ tokens :-
   $white+                                   ; -- remove multiple white-spaces
   "program" .*                              ;
   "//" .*                                   ; -- skips single line comments
-  "(*" .*                                   ; -- skips multi line comments
-  .* "*)"                                   ; -- skips multi line comments
+  "{*" .*                                   ; -- skips multi line comments
+  .* "*}"                                   ; -- skips multi line comments
   $digit+\.$digit*                          { tok_read     TokenFloat }
   [\+]|[\-]|[\*]|[\/]|[=]|:=                { tok_string     TokenOp  }
   [\<]|[\>]|\<=|\>=                         { tok_string     TokenOp  }
